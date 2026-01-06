@@ -32,9 +32,9 @@ Some examples of unacceptable behavior include:
 
 ## Our Responsibilities
 
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+All contributors are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+All contributors have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
 
 ## Scope
 
@@ -42,15 +42,13 @@ This Code of Conduct applies both within project spaces and in public spaces whe
 
 ## Enforcement
 
-If a team member notes unaccetable behavior in another team member related to use of AI tools or adapted code, lack of communication, or missing labs/meetings, they should attempt to provide one warning to said team member and/or initiate a group discussion with all team members, before taking the issues to the teaching team.
+If a team member notes unaccetable behavior in another team member related to use of AI tools or adapted code, lack of communication, or missing labs/meetings, they should attempt to provide one warning and/or initiate a group discussion with all team members, before taking the issues to the teaching team.
 
-The team member will have 24 hours to fix the issue (e.g. replace the affected code, add sufficient citation to their code, increase communication, or demonstrate consistent attendance at future meetings (may take more than 24 hours)). Said team member may be assigned additional work to compensate for the time and effort that their team mates put in to identify and resolve any code issues, or work that a team member was unable to complete due to waiting on their communcation/their lack of attendance in lab/meetings. For a code/plaigarism issue, said team member may continue to be assigned additional work long-term such that other team members have more time to review their work. Unacceptable behaviors that are corrected after the first warning can still be mentioned in peer evaluations, which may have grading consequences at the discretion of the teaching team.
+If the unacceptable behaviors persist after the first warning, the team will involve the teaching team, who may invoke disciplinary or grading action.
 
-If a team member notes any other unacceptable behavior, is uncomfortable providing or for any other reason unable to provide a first warning or discuss with other group members, or the unacceptable behavior is not sufficiently addressed or persists after the first warning, the team will involve the teaching team, who may invoke disciplinary or grading action.
+Instances of unacceptable behavior by contributors outside of the project team can be reported by contacting the project team at <daisy025@student.ubc.ca>. The project team will review and investigate the complaints, and will respond accordingly. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
 
-Instances of unacceptable behavior by contributors outside of the project team can be reported by contacting the project team at <molkess@student.ubc.ca>. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
-
-Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
+All contributors who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
 
 ## Attribution
 
