@@ -5,9 +5,9 @@ Daisy (Ying) Zhou, William Song, Yasaman Baher
 Creating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow.
 ## List of Functions
 - ```param_tuning_summary``` <br>
-Create a summary of the hyperparameter tuning results and extract the best estimator. <br>
+Creates a summary of the hyperparameter tuning results and extract the best estimator. <br>
 - ```model_metric_compare``` <br>
-Create dataframe of metric results between models for comparisons.  <br>
+Creates a dataframe of metric results between models for comparisons.  <br>
 - ```model_evaluation_plotting``` <br>
 Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
 ## Positioning in the Python Ecosystem
