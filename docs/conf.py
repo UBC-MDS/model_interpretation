@@ -138,7 +138,7 @@ html_theme = "pydata_sphinx_theme"
 # html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "pyos_wnsong_doc"
+htmlhelp_basename = "model_interpretation_doc"
 
 
 intersphinx_mapping = {
