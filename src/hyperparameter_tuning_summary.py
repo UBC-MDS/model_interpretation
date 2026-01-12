@@ -10,7 +10,7 @@ from sklearn.model_selection import RandomizedSearchCV
 
 def param_tuning_summary(param_search_cv):
     """
-    Create a summary of the hyperparameter tuning results and extract the best estimatot
+    Create a summary of the hyperparameter tuning results and extract the best estimator
 
     Parameters
     ----------
