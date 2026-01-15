@@ -5,7 +5,7 @@ import pytest
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import StandardScaler
 
-ROOT = Path(__file__).resolve().parents[1]  # project root
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 @pytest.fixture

@@ -51,8 +51,7 @@ def model_evaluation_plotting(pipeline, X_test, y_test):
     cm_table = pd.crosstab(y_test, y_pred)
 
     cm_display = ConfusionMatrixDisplay.from_predictions(
-        y_test, y_pred, values_format="d"
-    )
+        y_test, y_pred, values_format="d")
 
     return accuracy, f2, y_pred, cm_table, cm_display
 
