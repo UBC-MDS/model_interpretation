@@ -39,7 +39,7 @@ conda env create -f environment.yml
 conda activate model_interpretation
 
 # 3. Install the package
-pip install -e .
+pip install -e ".[tests]"
 
 # 4. Run tests
 pytest
