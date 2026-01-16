@@ -5,7 +5,8 @@ from sklearn.metrics import make_scorer, accuracy_score, precision_score, recall
 
 def model_cv_metric_compare(models_dict, X, y, cv=5):
     """
-    Evaluates multiple models using Cross-Validation and returns a metric/scorer comparison DataFrame.
+    Evaluates multiple binary classification models using cross-validation 
+    and returns a metric/scorer comparison DataFrame.
     
     Parameters
     ----------
@@ -32,7 +33,27 @@ def model_cv_metric_compare(models_dict, X, y, cv=5):
     dataframe : pandas.DataFrame
         Dataframe containing model name and mean evaluation metrics.
     """
+    # Input Validation Steps    
+    # Check if models_dict is a dictionary and not empty
+    if not isinstance(models_dict, dict):
+        raise TypeError(f"The 'models_dict' argument must be a dictionary. Got {type(models_dict).__name__} instead.")
+
+    if not models_dict:
+        raise ValueError("The 'models_dict' cannot be empty. Please provide at least one model.")
+
+    # Check X and y types
+    if not isinstance(X, pd.DataFrame):
+        raise TypeError("The argument 'X' must be a pandas DataFrame.")
     
+    if not isinstance(y, pd.Series):
+        raise TypeError("The argument 'y' must be a pandas Series.")
+
+    # Check if 'y' is valid for specific logic (Since hardcoded pos_label="Y")
+    # This prevents obscure scoring errors later
+    if "Y" not in y.unique():
+        raise ValueError("The target 'y' must contain the class label 'Y' because this function assumes pos_label='Y'.")
+
+
     # Define Scorers that handle specific pos_label="Y"
     scorers = {
         'accuracy': make_scorer(accuracy_score),
