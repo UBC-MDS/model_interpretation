@@ -1,40 +1,40 @@
 from sklearn.metrics import ConfusionMatrixDisplay, fbeta_score
-import pandas as pd
 from sklearn.utils.validation import check_is_fitted
+import pandas as pd
 import numpy as np
 
 def model_evaluation_plotting(pipeline, X_test, y_test):
     """
-    Creates standard classification metrics, creates a
-    confusion matrix as a table, and creates a confusion matrix
-    display object for visualization.
+    Compute standard classification metrics and confusion matrix artifacts.
 
     Parameters
     ----------
-    pipeline : sklearn.pipeline.Pipeline
-        Trained pipeline object.
+    pipeline : sklearn estimator or sklearn.pipeline.Pipeline
+        Fitted model object that implements .predict() and .score().
     X_test : pandas.DataFrame
-        Test features.
-    y_test : pandas.Series
-        Test labels.
+        Test features. Must not contain NaNs.
+    y_test : array-like of shape (n_samples,)
+        Test labels (pandas Series, numpy array, or list). Must not contain NaNs.
 
     Returns
     -------
     accuracy : float
         Classification accuracy on the test data.
-
-    f2_score : float
-        F2 score (beta = 2), emphasizing recall, computed with positive label "Y".
-
+    f2 : float
+        F2 score (beta=2) using positive label "Y".
     y_pred : numpy.ndarray
         Predicted labels for the test data.
-
     cm_table : pandas.DataFrame
-        Confusion matrix table with true labels as rows and predicted labels
-        as columns.
-
+        Confusion matrix table (rows=true labels, cols=predicted labels).
     cm_display : sklearn.metrics.ConfusionMatrixDisplay
-        Confusion matrix display object that can be plotted
+        Confusion matrix display object.
+
+    Raises
+    ------
+    TypeError
+        If inputs have invalid types, or if pipeline is not fitted.
+    ValueError
+        If X_test and y_test lengths differ, or if X_test/y_test contain NaNs.
     """
     if not hasattr(pipeline, "predict") or not hasattr(pipeline, "score"):
         raise TypeError("pipeline must have predict and score methods")
@@ -44,7 +44,9 @@ def model_evaluation_plotting(pipeline, X_test, y_test):
 
     if y_test is None or not isinstance(y_test, (pd.Series, np.ndarray, list)):
         raise TypeError("y_test must be a 1D array-like (Series/ndarray/list), not None")
-    
+
+    y_test = pd.Series(y_test)
+
     if len(X_test) != len(y_test):
         raise ValueError("X_test and y_test must have the same length")
 
@@ -58,10 +60,7 @@ def model_evaluation_plotting(pipeline, X_test, y_test):
 
     if y_test.isna().any():
         raise ValueError("y_test contains NaNs")
-    
-    y_test = pd.Series(y_test)
-    
-    
+
     accuracy = pipeline.score(X_test, y_test)
     y_pred = pipeline.predict(X_test)
 
@@ -69,7 +68,7 @@ def model_evaluation_plotting(pipeline, X_test, y_test):
     cm_table = pd.crosstab(y_test, y_pred)
 
     cm_display = ConfusionMatrixDisplay.from_predictions(
-        y_test, y_pred, values_format="d")
+        y_test, y_pred, values_format="d"
+    )
 
     return accuracy, f2, y_pred, cm_table, cm_display
-

@@ -5,6 +5,15 @@ from model_auto_interpret.model_evaluation import model_evaluation_plotting
 from model_auto_interpret.utils import create_test_artifacts
 from sklearn.metrics import ConfusionMatrixDisplay
 
+"""
+Tests for model_evaluation_plotting.
+
+Covers:
+- happy-path outputs and types
+- input validation (TypeError)
+- common edge cases (NaNs, unexpected labels, length mismatch)
+"""
+
 @pytest.fixture(scope="module")
 def artifacts():
     return create_test_artifacts()
