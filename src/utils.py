@@ -1,0 +1,128 @@
+import pandas as pd
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.dummy import DummyClassifier
+from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+def create_test_artifacts():
+    """
+    Creates synthetic data and fitted models for testing ML functions.
+
+    Returns:
+        X_train (DataFrame): Training features
+        X_test (DataFrame): Test features
+        y_train (Series): Training labels (encoded as 'N', 'Y')
+        y_test (Series): Test labels (encoded as 'N', 'Y')
+        models (dict): Dictionary of fitted pipelines
+    
+    Example:
+        To use this function, simply call:
+            X_train, X_test, y_train, y_test, models = create_test_artifacts()
+        
+        Models included:
+            - Dummy: Dummy Classifier
+            - SVM: SVM RBF
+            - KNN: KNN
+            - DecisionTree: Decision Tree
+            - RandomForest: Random Forest
+        
+        To select a specific model for testing, access it via the models dictionary:
+            single_model = models["RandomForest"]
+
+        
+    """
+    # Generate Synthetic Data
+    # Create 200 samples with 5 numeric features
+    X, y = make_classification(
+        n_samples=200, 
+        n_features=5, 
+        n_informative=3,
+        n_redundant=0, 
+        random_state=123
+    )
+
+    # Wrap in Pandas
+    X_df = pd.DataFrame(X, columns=[f"feature_{i}" for i in range(5)])
+    
+    # Map 0/1 to 'N'/'Y' so fbeta_score(pos_label="Y") works
+    y_series = pd.Series(y).map({0: 'N', 1: 'Y'})
+    y_series.name = "churn"
+
+    # Train-Test Split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_df, y_series, test_size=0.3, random_state=123
+    )
+
+    # Define Models and Pipelines
+    scaler = StandardScaler()
+
+    models = {
+        "Dummy": make_pipeline(scaler, DummyClassifier(strategy="most_frequent")),
+        "SVM": make_pipeline(scaler, SVC(kernel="rbf", probability=True, random_state=123)),
+        "KNN": make_pipeline(scaler, KNeighborsClassifier(n_neighbors=3)),
+        "DecisionTree": make_pipeline(scaler, DecisionTreeClassifier(max_depth=5, random_state=123)),
+        "RandomForest": make_pipeline(scaler, RandomForestClassifier(n_estimators=10, random_state=123))
+    }
+
+    # Fit the models
+    # Test functions expect fitted estimators
+    for name, pipe in models.items():
+        pipe.fit(X_train, y_train)
+
+    return X_train, X_test, y_train, y_test, models
+
+
+# 
+def create_test_search_cv_artifacts():
+    """
+    Creates fitted GridSearchCV and RandomizedSearchCV objects for testing the parameter_tuning_summary function.
+    
+    Returns:
+        tuple: (X_train, X_test, y_train, y_test, fitted_grid_search, fitted_random_search)
+    
+    Example:
+        X_train, X_test, y_train, y_test, grid_cv, random_cv = create_test_search_cv_artifacts()
+        df_summary, best_model = param_tuning_summary(grid_cv)
+    """
+    
+    # generate sample data
+    X_train, X_test, y_train, y_test, _ = create_test_artifacts()
+    
+    # Create GridSearchCV based on SVC model and fit with training data
+    param_grid = {
+        'svc__C': [0.1, 1, 10],
+        'svc__kernel': ['linear', 'rbf']
+    }
+
+    grid_search = GridSearchCV(
+        make_pipeline(StandardScaler(), SVC(random_state=123)),
+        param_grid,
+        cv=3,
+        scoring='accuracy'
+    )
+    
+    grid_search.fit(X_train, y_train)
+    
+    # Create RandomizedSearchCV based on SVC model and fit with training data
+    param_distributions = {
+        'svc__C': [0.1, 1, 10, 100, 1000, 10000],
+        'svc__kernel': ['linear', 'rbf', 'poly']
+    }
+    
+    random_search = RandomizedSearchCV(
+        make_pipeline(StandardScaler(), SVC(random_state=123)),
+        param_distributions,
+        n_iter=5,
+        cv=3,
+        scoring='accuracy',
+        random_state=123
+    )
+    random_search.fit(X_train, y_train)
+    
+    return X_train, X_test, y_train, y_test, grid_search, random_search
