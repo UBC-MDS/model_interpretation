@@ -15,7 +15,6 @@ Creates a dataframe of metric results between models for comparisons.  <br>
 Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
 
 ## Running the test suite
-
 Tests are run using the `pytest` command in the root of the project.
 More details about the test suite can be found in the 
 [`tests`](tests) directory.
