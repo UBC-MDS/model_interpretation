@@ -3,9 +3,17 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
-  - numpy
-  - pandas
+  - numpy=2.4.1
+  - pandas=2.3.3
   - scikit-learn
   - jupyterlab
-  - pytest           
-  - pytest-cov
+  - pytest=9.0.2          
+  - pytest-cov=7.0.0
+  - matplotlib=3.10.8
+
+
+
+
+       
+
+

@@ -7,8 +7,8 @@ from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from src.hyperparameter_tuning_summary import param_tuning_summary
-from src.utils import create_test_search_cv_artifacts
+from pyos_wnsong.hyperparameter_tuning_summary import param_tuning_summary
+from pyos_wnsong.utils import create_test_search_cv_artifacts
 
 @pytest.fixture(scope="module")
 def search_artifacts():
@@ -50,7 +50,7 @@ def test_param_tuning_summary_unfitted_gridsearch():
         param_tuning_summary(unfitted_gs)
     
     # Verify error message is informative
-    assert "the gridSearchCV object has not been fitted" in str(excinfo.value).lower()
+    assert "not been fitted" in str(excinfo.value).lower()
 
 
 def test_param_tuning_summary_invalid_input_type():
