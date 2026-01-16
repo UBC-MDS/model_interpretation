@@ -10,6 +10,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+
 def create_test_artifacts():
     """
     Creates synthetic data and fitted models for testing ML functions.
@@ -32,7 +33,7 @@ def create_test_artifacts():
             - DecisionTree: Decision Tree
             - RandomForest: Random Forest
         
-        To select a specific model for testing, access it via the models dictionary:
+        To select a specific model for testing, use models dictionary:
             single_model = models["RandomForest"]
 
         
