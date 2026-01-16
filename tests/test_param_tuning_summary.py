@@ -7,8 +7,8 @@ from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from pyos_wnsong.hyperparameter_tuning_summary import param_tuning_summary
-from pyos_wnsong.utils import create_test_search_cv_artifacts
+from model_auto_interpret.hyperparameter_tuning_summary import param_tuning_summary
+from model_auto_interpret.utils import create_test_search_cv_artifacts
 
 @pytest.fixture(scope="module")
 def search_artifacts():

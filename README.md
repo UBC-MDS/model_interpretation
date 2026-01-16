@@ -14,6 +14,11 @@ Creates a dataframe of metric results between models for comparisons.  <br>
 - ```model_evaluation_plotting``` <br>
 Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
 
+## Running the test suite
+Tests are run using the `pytest` command in the root of the project.
+More details about the test suite can be found in the 
+[`tests`](tests) directory.
+
 ## Positioning in the Python Ecosystem
 This package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.
 
