@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 import numpy as np
-from model_automation.utils import create_test_artifacts 
-from model_automation.model_compare import model_cv_metric_compare
+from model_auto_interpret.utils import create_test_artifacts 
+from model_auto_interpret.model_compare import model_cv_metric_compare
 
 
 @pytest.fixture
