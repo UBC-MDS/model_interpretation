@@ -15,7 +15,7 @@ Creating machine learning models often involves writing redundant code, particul
 -   `model_evaluation_plotting` <br> Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
 
 ## Running the test suite
-Tests are run using the `pytest` command in the root of the project.
+Tests are run using the `pytest` command in the root of the project. To run the test, please follow the Quickstart section below.
 More details about the test suite can be found in the 
 [`tests`](tests) directory.
 
@@ -45,7 +45,7 @@ pip install -e ".[tests]"
 pytest
 
 # 5. Run analysis / main workflow
-python src/model_interpretation/<MAIN_SCRIPT>.py
+python src/model_auto_interpret/<MAIN_SCRIPT>.py
 ```
 
 ## Environment and Dependencies
