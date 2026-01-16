@@ -1,8 +1,8 @@
 import pytest
 import pandas as pd
 import numpy as np
-from pyos_wnsong.model_evaluation import model_evaluation_plotting
-from pyos_wnsong.utils import create_test_artifacts
+from model_automation.model_evaluation import model_evaluation_plotting
+from model_automation.utils import create_test_artifacts
 from sklearn.metrics import ConfusionMatrixDisplay
 
 @pytest.fixture(scope="module")
