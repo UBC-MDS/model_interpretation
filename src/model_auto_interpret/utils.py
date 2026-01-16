@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.datasets import make_classification
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.dummy import DummyClassifier
@@ -9,6 +9,7 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+
 
 def create_test_artifacts():
     """
@@ -32,7 +33,7 @@ def create_test_artifacts():
             - DecisionTree: Decision Tree
             - RandomForest: Random Forest
         
-        To select a specific model for testing, access it via the models dictionary:
+        To select a specific model for testing, use models dictionary:
             single_model = models["RandomForest"]
 
         
@@ -76,3 +77,53 @@ def create_test_artifacts():
         pipe.fit(X_train, y_train)
 
     return X_train, X_test, y_train, y_test, models
+
+
+# 
+def create_test_search_cv_artifacts():
+    """
+    Creates fitted GridSearchCV and RandomizedSearchCV objects for testing the parameter_tuning_summary function.
+    
+    Returns:
+        tuple: (X_train, X_test, y_train, y_test, fitted_grid_search, fitted_random_search)
+    
+    Example:
+        X_train, X_test, y_train, y_test, grid_cv, random_cv = create_test_search_cv_artifacts()
+        df_summary, best_model = param_tuning_summary(grid_cv)
+    """
+    
+    # generate sample data
+    X_train, X_test, y_train, y_test, _ = create_test_artifacts()
+    
+    # Create GridSearchCV based on SVC model and fit with training data
+    param_grid = {
+        'svc__C': [0.1, 1, 10],
+        'svc__kernel': ['linear', 'rbf']
+    }
+
+    grid_search = GridSearchCV(
+        make_pipeline(StandardScaler(), SVC(random_state=123)),
+        param_grid,
+        cv=3,
+        scoring='accuracy'
+    )
+    
+    grid_search.fit(X_train, y_train)
+    
+    # Create RandomizedSearchCV based on SVC model and fit with training data
+    param_distributions = {
+        'svc__C': [0.1, 1, 10, 100, 1000, 10000],
+        'svc__kernel': ['linear', 'rbf', 'poly']
+    }
+    
+    random_search = RandomizedSearchCV(
+        make_pipeline(StandardScaler(), SVC(random_state=123)),
+        param_distributions,
+        n_iter=5,
+        cv=3,
+        scoring='accuracy',
+        random_state=123
+    )
+    random_search.fit(X_train, y_train)
+    
+    return X_train, X_test, y_train, y_test, grid_search, random_search
