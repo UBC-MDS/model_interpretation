@@ -11,13 +11,8 @@ Creating machine learning models often involves writing redundant code, particul
 ## List of Functions
 
 -   `param_tuning_summary` <br> Creates a summary of the hyperparameter tuning results and extract the best estimator. <br>
--   `model_metric_compare` <br> Creates a dataframe of metric results between models for comparisons. <br>
+-   `model_cv_metric_compare` <br> Creates a dataframe of cross-validation metric results between models for comparisons. <br>
 -   `model_evaluation_plotting` <br> Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
-
-## Running the test suite
-Tests are run using the `pytest` command in the root of the project. To run the test, please follow the Quickstart section below.
-More details about the test suite can be found in the 
-[`tests`](tests) directory.
 
 ## Positioning in the Python Ecosystem
 
@@ -39,14 +34,24 @@ conda env create -f environment.yml
 conda activate model_interpretation
 
 # 3. Install the package
+# Exclude tests if not needed
+pip install -e .
+# Include tests if needed
 pip install -e ".[tests]"
 
 # 4. Run tests
+# If tests were installed in step 3
+# For more details, see tests/README.md, linked below
 pytest
 
 # 5. Run analysis / main workflow
 python src/model_auto_interpret/<MAIN_SCRIPT>.py
 ```
+
+## Running the test suite
+Tests are run using the `pytest` command in the root of the project.
+More details about the test suite and to run tests can be found in the 
+[`tests`](tests) directory.
 
 ## Environment and Dependencies
 
