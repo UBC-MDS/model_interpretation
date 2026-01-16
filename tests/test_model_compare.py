@@ -20,13 +20,45 @@ def shared_artifacts():
     """
     return create_test_artifacts()
 
+def test_input_validation_errors(shared_artifacts):
+    """
+    Test that the function raises correct errors for invalid inputs.
+    """
+    X_train, _, y_train, _, models = shared_artifacts
+
+    # Test models_dict type check
+    # Pass a list instead of a dict
+    with pytest.raises(TypeError, match="must be a dictionary"):
+        model_cv_metric_compare(["not_a_dict"], X_train, y_train)
+
+    # Test empty models_dict check
+    # Pass an empty dict
+    with pytest.raises(ValueError, match="cannot be empty"):
+        model_cv_metric_compare({}, X_train, y_train)
+
+    # Test X type check
+    # Pass a numpy array instead of a DataFrame
+    with pytest.raises(TypeError, match="'X' must be a pandas DataFrame"):
+        model_cv_metric_compare(models, X_train.values, y_train)
+
+    # Test y type check
+    # Pass a numpy array instead of a Series
+    with pytest.raises(TypeError, match="'y' must be a pandas Series"):
+        model_cv_metric_compare(models, X_train, y_train.values)
+
+    # Test y content check
+    # Create a target series that only has 'N', missing the required 'Y'
+    y_invalid = pd.Series(['N'] * len(y_train))
+    with pytest.raises(ValueError, match="must contain the class label 'Y'"):
+        model_cv_metric_compare(models, X_train, y_invalid)
+
 def test_cv_returns_dataframe(shared_artifacts):
     """
     Test if the function returns a non-empty Pandas DataFrame with the correct index.
     
     This ensures the basic output structure is correct before checking specific values.
     """
-    X_train, X_test, y_train, y_test, models = shared_artifacts
+    X_train, _, y_train, _, models = shared_artifacts
 
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
     
@@ -41,7 +73,7 @@ def test_cv_includes_all_metrics(shared_artifacts):
     Verifies that 'accuracy', 'precision', 'recall', 'f1', and 'roc_auc' are present
     in the results.
     """
-    X_train, X_test, y_train, y_test, models = shared_artifacts
+    X_train, _, y_train, _, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
     
@@ -56,7 +88,7 @@ def test_roc_auc_logic(shared_artifacts):
     Verifies that a model with `predict_proba` (like RandomForest) receives a 
     valid float score for ROC AUC, rather than NaN.
     """
-    X_train, X_test, y_train, y_test, models = shared_artifacts
+    X_train, _, y_train, _, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
     
@@ -71,7 +103,7 @@ def test_values_are_means(shared_artifacts):
     A sanity check to ensure the cross-validation mean calculation 
     is working and not returning strings or unscaled values.
     """
-    X_train, X_test, y_train, y_test, models = shared_artifacts
+    X_train, _, y_train, _, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
     
