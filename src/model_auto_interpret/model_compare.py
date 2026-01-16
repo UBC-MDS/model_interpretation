@@ -50,16 +50,16 @@ def model_cv_metric_compare(models_dict, X, y, cv=5):
         
         # Only add ROC_AUC if the model supports predict_proba
         if hasattr(model, "predict_proba"):
-            # Note: For string labels, we need to ensure the scorer knows which class is positive.
+            # Note: For string labels, need to ensure the scorer knows which class is positive.
             # response_method='predict_proba' is handled by make_scorer automatically if configured,
             # but standard 'roc_auc' string in sklearn often assumes 0/1 or specific ordering.
-            # We create a custom scorer for safety with string labels.
+            # Create a custom scorer for safety with string labels.
             def custom_roc(y_true, y_prob):
                  # This helper is needed if y is "Y"/"N" to map it for calculation
                  y_true_num = (y_true == "Y").astype(int)
                  return roc_auc_score(y_true_num, y_prob)
             
-            # We tell sklearn to pass the probability of the positive class
+            # Tell sklearn to pass the probability of the positive class
             current_scorers['roc_auc'] = make_scorer(custom_roc, response_method="predict_proba")
 
         # Run Cross-Validation
@@ -69,10 +69,10 @@ def model_cv_metric_compare(models_dict, X, y, cv=5):
             y, 
             cv=cv, 
             scoring=current_scorers,
-            n_jobs=-1 # Use all CPU cores for speed
+            n_jobs=1
         )
 
-        # Aggregate Results (Take the Mean of the folds)
+        # Aggregate Results
         metrics = {"Model": name}
         for metric_name in current_scorers.keys():
             # cross_validate returns keys like 'test_accuracy', 'test_f1', etc.
@@ -80,10 +80,10 @@ def model_cv_metric_compare(models_dict, X, y, cv=5):
             if key in cv_results:
                 metrics[metric_name] = np.mean(cv_results[key])
             else:
-                metrics[metric_name] = np.nan
+                metrics[metric_name] = np.nan # pragma: no cover
 
         results_list.append(metrics)
 
-    # 5. Format Output
+    # Format Output
     comparison_df = pd.DataFrame(results_list).set_index("Model")
     return comparison_df
