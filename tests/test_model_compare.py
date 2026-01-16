@@ -11,16 +11,23 @@ from model_auto_interpret.model_compare import model_cv_metric_compare
 @pytest.fixture
 def shared_artifacts():
     """
-    Calls the helper function ONCE.
-    This creates the data and models used by all tests.
+    Pytest fixture to generate synthetic data and models once for all tests.
+    
+    Returns
+    -------
+    tuple
+        (X_train, X_test, y_train, y_test, models) where models is a dict of fitted pipelines.
     """
     return create_test_artifacts()
 
 def test_cv_returns_dataframe(shared_artifacts):
-    # Unpack what you need from the fixture
-    X_train, X_test, y_train, y_test, models = shared_artifacts
+    """
+    Test if the function returns a non-empty Pandas DataFrame with the correct index.
     
-    # Use X_train/y_train for Cross Validation
+    This ensures the basic output structure is correct before checking specific values.
+    """
+    X_train, X_test, y_train, y_test, models = shared_artifacts
+
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
     
     assert isinstance(result, pd.DataFrame)
@@ -28,6 +35,12 @@ def test_cv_returns_dataframe(shared_artifacts):
     assert result.index.name == "Model"
 
 def test_cv_includes_all_metrics(shared_artifacts):
+    """
+    Test if the output DataFrame contains all required metric columns.
+    
+    Verifies that 'accuracy', 'precision', 'recall', 'f1', and 'roc_auc' are present
+    in the results.
+    """
     X_train, X_test, y_train, y_test, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
@@ -37,6 +50,12 @@ def test_cv_includes_all_metrics(shared_artifacts):
         assert metric in result.columns
 
 def test_roc_auc_logic(shared_artifacts):
+    """
+    Test if ROC AUC is correctly calculated for models that support probability.
+    
+    Verifies that a model with `predict_proba` (like RandomForest) receives a 
+    valid float score for ROC AUC, rather than NaN.
+    """
     X_train, X_test, y_train, y_test, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
@@ -46,6 +65,12 @@ def test_roc_auc_logic(shared_artifacts):
     assert not np.isnan(result.loc["RandomForest", "roc_auc"])
 
 def test_values_are_means(shared_artifacts):
+    """
+    Test if the returned metric values are valid floating point numbers (0.0 to 1.0).
+    
+    A sanity check to ensure the cross-validation mean calculation 
+    is working and not returning strings or unscaled values.
+    """
     X_train, X_test, y_train, y_test, models = shared_artifacts
     
     result = model_cv_metric_compare(models, X_train, y_train, cv=2)
@@ -55,6 +80,15 @@ def test_values_are_means(shared_artifacts):
     assert 0.0 <= acc <= 1.0
 
 def test_mixed_probability_support(shared_artifacts):
+    """
+    Test robust handling of mixed model capabilities (with and without `predict_proba`).
+    
+    Ensures that when comparing a model that supports probabilities (RF) against
+    one that does not (SVM with probability=False), the function:
+    1. Still produces an 'roc_auc' column.
+    2. Assigns a valid score to the probability model.
+    3. Assigns NaN correctly to the non-probability model.
+    """
     X_train, _, y_train, _, models = shared_artifacts
     
     # Create a model explicitly without probability support
