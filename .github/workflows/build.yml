@@ -29,10 +29,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python 
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: "{{ cookiecutter.python_version }}"
 
     - name: Install dependencies
       run: |
@@ -43,3 +43,12 @@ jobs:
     - name: Run tests with pytest
       run: |
         pytest tests/ -v --cov=pyos_wnsong --cov-report=xml --cov-report=term
+
+    - name: Use Codecov to track coverage 
+      uses: codecov/codecov-action@v5        
+      with:          
+        token: ${{ secrets.CODECOV_TOKEN }}          
+        files: ./coverage.xml   # coverage report      
+    
+    - name: Build documentation
+      run: poetry run make html --directory docs/
