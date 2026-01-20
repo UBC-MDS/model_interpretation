@@ -25,5 +25,4 @@ quartodoc:
       contents:
         # the functions being documented in the package.
         # you can refer to anything: class methods, modules, etc..
-        - get_object
-        - preview
+        - hyperparameter_tuning_summary.param_tuning_summary
