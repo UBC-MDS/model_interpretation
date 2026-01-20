@@ -1,10 +1,12 @@
 # This is a basic workflow to help you get started with Actions
 
+# Name of the workflow
 name: build
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push or pull request events but only for 
+  # the main branch
   push:
     branches: [ main ]
   pull_request:
@@ -13,42 +15,38 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow run is made up of one or more jobs that can run 
+# sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "test"
+  test:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.11']
 
+    # Steps represent a sequence of tasks that will be executed as 
+    # part of the job
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      # Checks-out your repository so your job can access it
+      - name: Check-out repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python 
-      uses: actions/setup-python@v5
-      with:
-        python-version: "{{ cookiecutter.python_version }}"
+      # Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+        python-version: ${{ matrix.python-version }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .
-        pip install -e ".[tests]"
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[tests]
 
-    - name: Run tests with pytest
-      run: |
-        pytest tests/ -v --cov=pyos_wnsong --cov-report=xml --cov-report=term
+      # Run pytest
+      - name: Run tests with pytest
+        run: |
+          pytest tests/ -v --cov=pyos_wnsong --cov-report=xml --cov-report=term
 
-    - name: Use Codecov to track coverage 
-      uses: codecov/codecov-action@v5        
-      with:          
-        token: ${{ secrets.CODECOV_TOKEN }}          
-        files: ./coverage.xml   # coverage report      
-    
-    - name: Build documentation
-      run: poetry run make html --directory docs/
