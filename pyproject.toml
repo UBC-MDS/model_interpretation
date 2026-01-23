@@ -62,10 +62,6 @@ docs = [
     "quartodoc",
 ]
 
-build = [
-    "pip-audit",
-    "twine",
-]
 tests = [
     "pytest",
     "pytest-cov",
