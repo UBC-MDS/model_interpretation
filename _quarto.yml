@@ -20,9 +20,11 @@ quartodoc:
   css: reference/_styles-quartodoc.css
 
   sections:
-    - title: Some functions
-      desc: Functions to inspect docstrings.
+    - title: Model Interpretation Functions
+      desc: Functions to help interpret machine learning models.
       contents:
         # the functions being documented in the package.
         # you can refer to anything: class methods, modules, etc..
         - hyperparameter_tuning_summary.param_tuning_summary
+        - model_compare #.model_cv_metric_compare
+        - model_evaluation #.model_evaluation_plotting
