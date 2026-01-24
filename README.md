@@ -62,8 +62,6 @@ pip install -e .
 pip install -e ".[tests]"
 
 # 4. Run tests
-# If tests were installed in step 3
-# For more details, see tests/README.md, linked below
 pytest
 ```
 
