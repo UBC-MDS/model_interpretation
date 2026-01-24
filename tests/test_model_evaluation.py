@@ -110,6 +110,11 @@ def test_model_evaluation_plotting_length_mismatch(pipeline, X_train, y_train):
         model_evaluation_plotting(pipeline, X_short, y_train)
 
 
+from sklearn.base import clone
+import pytest
+from sklearn.exceptions import NotFittedError
+
 def test_model_evaluation_plotting_pipeline_not_fitted(pipeline, X_train, y_train):
-    with pytest.raises(Exception):
-        model_evaluation_plotting(pipeline, X_train, y_train)
+    fresh = clone(pipeline)
+    with pytest.raises(TypeError):
+        model_evaluation_plotting(fresh, X_train, y_train)
