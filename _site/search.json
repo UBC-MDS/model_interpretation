@@ -103,5 +103,205 @@
     "title": "Development Guide",
     "section": "",
     "text": "You can build your package using the environment and scripts defined in the build tables:\nhatch run build:check\nThis script builds and checks the output distribution files of your package.\nThis build environment table declares that pip and twine should be added to that environment. Adding pip to the environment ensures that it is a current, up-to-date version.\n[tool.hatch.envs.build]\ndescription = \"\"\"Build and test your package.\"\"\"\ndependencies = [\n    \"pip\",\n    \"twine\",\n]\ndetached = true\n# This table installs created the command hatch run install:check which will build and check your package.\n[tool.hatch.envs.install.scripts]\ncheck = [\n    \"pip check\",\n    \"hatch build {args:--clean}\",\n    \"twine check dist/*\",\n]\nThis uses the above environment and tells hatch to run\n\npip check, # verifies your dependencies\nhatch build --clean\n\ntwine check dist/* # this checks your distribution for metadata and other potential issues. to build and test your package."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher\n\n\n\nCreating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow.\n\n\n\n\nparam_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. \n\n\n\n\nThis package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.\n\n\n\nThis project is fully reproducible given the steps below. All experiments can be rerun end-to-end.\n\n\n\n# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interpretation\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\n# If tests were installed in step 3\n# For more details, see tests/README.md, linked below\npytest\n\n# 5. Run analysis / main workflow\npython src/model_auto_interpret/&lt;MAIN_SCRIPT&gt;.py\n\n\n\nTests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory.\n\n\n\nname: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune\n\n\n\nThe software code contained within this repository is licensed under the MIT license. See the license file for more information."
+  },
+  {
+    "objectID": "index.html#contributors",
+    "href": "index.html#contributors",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher"
+  },
+  {
+    "objectID": "index.html#project-description",
+    "href": "index.html#project-description",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Creating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow."
+  },
+  {
+    "objectID": "index.html#list-of-functions",
+    "href": "index.html#list-of-functions",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "param_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization."
+  },
+  {
+    "objectID": "index.html#positioning-in-the-python-ecosystem",
+    "href": "index.html#positioning-in-the-python-ecosystem",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "This package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development."
+  },
+  {
+    "objectID": "index.html#reproducibility",
+    "href": "index.html#reproducibility",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "This project is fully reproducible given the steps below. All experiments can be rerun end-to-end."
+  },
+  {
+    "objectID": "index.html#quickstart",
+    "href": "index.html#quickstart",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interpretation\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\n# If tests were installed in step 3\n# For more details, see tests/README.md, linked below\npytest\n\n# 5. Run analysis / main workflow\npython src/model_auto_interpret/&lt;MAIN_SCRIPT&gt;.py"
+  },
+  {
+    "objectID": "index.html#running-the-test-suite",
+    "href": "index.html#running-the-test-suite",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Tests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory."
+  },
+  {
+    "objectID": "index.html#environment-and-dependencies",
+    "href": "index.html#environment-and-dependencies",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "name: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune"
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "The software code contained within this repository is licensed under the MIT license. See the license file for more information."
+  },
+  {
+    "objectID": "reference/model_evaluation.html",
+    "href": "reference/model_evaluation.html",
+    "title": "model_evaluation",
+    "section": "",
+    "text": "model_evaluation\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.html#functions",
+    "href": "reference/model_evaluation.html#functions",
+    "title": "model_evaluation",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "hyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#parameters",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#parameters",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#returns",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#returns",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.html",
+    "href": "reference/model_compare.html",
+    "title": "model_compare",
+    "section": "",
+    "text": "model_compare\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.html#functions",
+    "href": "reference/model_compare.html#functions",
+    "title": "model_compare",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare"
+    ]
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#model-interpretation-methods",
+    "href": "reference/index.html#model-interpretation-methods",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.html",
+    "href": "reference/hyperparameter_tuning_summary.html",
+    "title": "hyperparameter_tuning_summary",
+    "section": "",
+    "text": "hyperparameter_tuning_summary\n\n\n\n\n\nName\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.html#functions",
+    "href": "reference/hyperparameter_tuning_summary.html#functions",
+    "title": "hyperparameter_tuning_summary",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary"
+    ]
   }
 ]
