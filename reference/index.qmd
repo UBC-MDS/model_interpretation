@@ -6,6 +6,6 @@ Functions to help interpret machine learning models.
 
 | | |
 | --- | --- |
-| [hyperparameter_tuning_summary](hyperparameter_tuning_summary.qmd#model_auto_interpret.hyperparameter_tuning_summary) |  |
-| [model_compare](model_compare.qmd#model_auto_interpret.model_compare) |  |
-| [model_evaluation](model_evaluation.qmd#model_auto_interpret.model_evaluation) |  |
+| [hyperparameter_tuning_summary.param_tuning_summary](hyperparameter_tuning_summary.param_tuning_summary.qmd#model_auto_interpret.hyperparameter_tuning_summary.param_tuning_summary) | Create a summary of the hyperparameter tuning results and extract the best estimator |
+| [model_compare.model_cv_metric_compare](model_compare.model_cv_metric_compare.qmd#model_auto_interpret.model_compare.model_cv_metric_compare) | Evaluates multiple binary classification models using cross-validation  |
+| [model_evaluation.model_evaluation_plotting](model_evaluation.model_evaluation_plotting.qmd#model_auto_interpret.model_evaluation.model_evaluation_plotting) | Compute standard classification metrics and confusion matrix artifacts. |

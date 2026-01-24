@@ -1,0 +1,32 @@
+# model_evaluation.model_evaluation_plotting { #model_auto_interpret.model_evaluation.model_evaluation_plotting }
+
+```python
+model_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)
+```
+
+Compute standard classification metrics and confusion matrix artifacts.
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name     | Type                                           | Description                                                               | Default    |
+|----------|------------------------------------------------|---------------------------------------------------------------------------|------------|
+| pipeline | sklearn estimator or sklearn.pipeline.Pipeline | Fitted model object that implements .predict() and .score().              | _required_ |
+| X_test   | pandas.DataFrame                               | Test features. Must not contain NaNs.                                     | _required_ |
+| y_test   | array-like of shape (n_samples,)               | Test labels (pandas Series, numpy array, or list). Must not contain NaNs. | _required_ |
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name       | Type                                   | Description                                                       |
+|------------|----------------------------------------|-------------------------------------------------------------------|
+| accuracy   | float                                  | Classification accuracy on the test data.                         |
+| f2         | float                                  | F2 score (beta=2) using positive label "Y".                       |
+| y_pred     | numpy.ndarray                          | Predicted labels for the test data.                               |
+| cm_table   | pandas.DataFrame                       | Confusion matrix table (rows=true labels, cols=predicted labels). |
+| cm_display | sklearn.metrics.ConfusionMatrixDisplay | Confusion matrix display object.                                  |
+
+## Raises {.doc-section .doc-section-raises}
+
+| Name   | Type       | Description                                                            |
+|--------|------------|------------------------------------------------------------------------|
+|        | TypeError  | If inputs have invalid types, or if pipeline is not fitted.            |
+|        | ValueError | If X_test and y_test lengths differ, or if X_test/y_test contain NaNs. |
