@@ -1,6 +1,19 @@
 project:
   type: website
 
+# Top navigation bar
+website:
+  navbar:
+    background: primary
+    search: true
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Reference"
+        href: reference/index.qmd
+      - talks.qmd
+      - about.qmd 
+
 # tell quarto to read the generated sidebar
 metadata-files:
   - reference/_sidebar.yml
@@ -20,8 +33,8 @@ quartodoc:
   css: reference/_styles-quartodoc.css
 
   sections:
-    - title: Some functions
-      desc: Functions to inspect docstrings.
+    - title: Model Interpretation Methods
+      desc: Functions to help interpret machine learning models.
       contents:
         # the functions being documented in the package.
         # you can refer to anything: class methods, modules, etc..
