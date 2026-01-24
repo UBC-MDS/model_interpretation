@@ -1,0 +1,43 @@
+# model_compare { #model_auto_interpret.model_compare }
+
+`model_compare`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [model_cv_metric_compare](#model_auto_interpret.model_compare.model_cv_metric_compare) | Evaluates multiple binary classification models using cross-validation  |
+
+### model_cv_metric_compare { #model_auto_interpret.model_compare.model_cv_metric_compare }
+
+```python
+model_compare.model_cv_metric_compare(models_dict, X, y, cv=5)
+```
+
+Evaluates multiple binary classification models using cross-validation 
+and returns a metric/scorer comparison DataFrame.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name        | Type      | Description                                                                                     | Default    |
+|-------------|-----------|-------------------------------------------------------------------------------------------------|------------|
+| models_dict | dict      | Dictionary of {model_name: pipeline_object}.  Note: Models do not need to be fitted beforehand. | _required_ |
+| X           | DataFrame | Features (Training set or full dataset).                                                        | _required_ |
+| y           | Series    | Labels (Training set or full dataset).                                                          | _required_ |
+| cv          | int       | Number of cross-validation folds (default 5).                                                   | `5`        |
+
+#### Scorers Evaluated {.doc-section .doc-section-scorers-evaluated}
+
+- accuracy
+- precision (pos_label="Y")
+- recall (pos_label="Y")
+- f1 (pos_label="Y")
+- roc_auc (if model supports predict_proba)
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name      | Type             | Description                                                  |
+|-----------|------------------|--------------------------------------------------------------|
+| dataframe | pandas.DataFrame | Dataframe containing model name and mean evaluation metrics. |

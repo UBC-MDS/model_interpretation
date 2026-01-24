@@ -1,0 +1,307 @@
+[
+  {
+    "objectID": "src/model_auto_interpret/testing.html",
+    "href": "src/model_auto_interpret/testing.html",
+    "title": "Internal Testing Purpose, will be removed in future releases",
+    "section": "",
+    "text": "import pandas as pd\nimport numpy as np\nfrom sklearn.datasets import make_classification\nfrom sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.dummy import DummyClassifier\nfrom sklearn.svm import SVC\nfrom sklearn.neighbors import KNeighborsClassifier\nfrom sklearn.tree import DecisionTreeClassifier\nfrom sklearn.ensemble import RandomForestClassifier\n\n\ndef create_test_artifacts():\n    \"\"\"\n    Creates synthetic data and fitted models for testing ML functions.\n\n    Returns:\n        X_train (DataFrame): Training features\n        X_test (DataFrame): Test features\n        y_train (Series): Training labels (encoded as 'N', 'Y')\n        y_test (Series): Test labels (encoded as 'N', 'Y')\n        models (dict): Dictionary of fitted pipelines\n    \n    Example:\n        To use this function, simply call:\n            X_train, X_test, y_train, y_test, models = create_test_artifacts()\n        \n        Models included:\n            - Dummy: Dummy Classifier\n            - SVM: SVM RBF\n            - KNN: KNN\n            - DecisionTree: Decision Tree\n            - RandomForest: Random Forest\n        \n        To select a specific model for testing, use models dictionary:\n            single_model = models[\"RandomForest\"]\n\n        \n    \"\"\"\n    # Generate Synthetic Data\n    # Create 200 samples with 5 numeric features\n    X, y = make_classification(\n        n_samples=200, \n        n_features=5, \n        n_informative=3,\n        n_redundant=0, \n        random_state=123\n    )\n\n    # Wrap in Pandas\n    X_df = pd.DataFrame(X, columns=[f\"feature_{i}\" for i in range(5)])\n    \n    # Map 0/1 to 'N'/'Y' so fbeta_score(pos_label=\"Y\") works\n    y_series = pd.Series(y).map({0: 'N', 1: 'Y'})\n    y_series.name = \"churn\"\n\n    # Train-Test Split\n    X_train, X_test, y_train, y_test = train_test_split(\n        X_df, y_series, test_size=0.3, random_state=123\n    )\n\n    # Define Models and Pipelines\n    scaler = StandardScaler()\n\n    models = {\n        \"Dummy\": make_pipeline(scaler, DummyClassifier(strategy=\"most_frequent\")),\n        \"SVM\": make_pipeline(scaler, SVC(kernel=\"rbf\", probability=True, random_state=123)),\n        \"KNN\": make_pipeline(scaler, KNeighborsClassifier(n_neighbors=3)),\n        \"DecisionTree\": make_pipeline(scaler, DecisionTreeClassifier(max_depth=5, random_state=123)),\n        \"RandomForest\": make_pipeline(scaler, RandomForestClassifier(n_estimators=10, random_state=123))\n    }\n\n    # Fit the models\n    # Test functions expect fitted estimators\n    for name, pipe in models.items():\n        pipe.fit(X_train, y_train)\n\n    return X_train, X_test, y_train, y_test, models\n\n\n\nX_train, X_test, y_train, y_test, models = create_test_artifacts()\n\n\ndef model_cv_metric_compare(models_dict, X, y, cv=5):\n    \"\"\"\n    Evaluates multiple models using Cross-Validation and returns a metric/scorer comparison DataFrame.\n    \n    Parameters\n    ----------\n    models_dict : dict\n        Dictionary of {model_name: pipeline_object}. \n        Note: Models do not need to be fitted beforehand.\n    X : DataFrame\n        Features (Training set or full dataset).\n    y : Series\n        Labels (Training set or full dataset).\n    cv : int\n        Number of cross-validation folds (default 5).\n\n    Scorers Evaluated\n    -----------------\n    - accuracy\n    - precision (pos_label=\"Y\")\n    - recall (pos_label=\"Y\")\n    - f1 (pos_label=\"Y\")\n    - roc_auc (if model supports predict_proba)\n\n    Returns\n    -------\n    dataframe : pandas.DataFrame\n        Dataframe containing model name and mean evaluation metrics.\n    \"\"\"\n    \n    # Define Scorers that handle specific pos_label=\"Y\"\n    scorers = {\n        'accuracy': make_scorer(accuracy_score),\n        'precision': make_scorer(precision_score, pos_label=\"Y\"),\n        'recall': make_scorer(recall_score, pos_label=\"Y\"),\n        'f1': make_scorer(f1_score, pos_label=\"Y\"),\n    }\n\n    results_list = []\n\n    for name, model in models_dict.items():\n        # Check if model supports probabilities for ROC-AUC\n        # We need a separate handling for ROC AUC because it requires probabilities, not just predictions\n        current_scorers = scorers.copy()\n        \n        # Only add ROC_AUC if the model supports predict_proba\n        if hasattr(model, \"predict_proba\"):\n            # Note: For string labels, we need to ensure the scorer knows which class is positive.\n            # response_method='predict_proba' is handled by make_scorer automatically if configured,\n            # but standard 'roc_auc' string in sklearn often assumes 0/1 or specific ordering.\n            # We create a custom scorer for safety with string labels.\n            def custom_roc(y_true, y_prob):\n                 # This helper is needed if y is \"Y\"/\"N\" to map it for calculation\n                 y_true_num = (y_true == \"Y\").astype(int)\n                 return roc_auc_score(y_true_num, y_prob)\n            \n            # We tell sklearn to pass the probability of the positive class\n            current_scorers['roc_auc'] = make_scorer(custom_roc, response_method=\"predict_proba\")\n\n        # Run Cross-Validation\n        cv_results = cross_validate(\n            model, \n            X, \n            y, \n            cv=cv, \n            scoring=current_scorers,\n            n_jobs=-1 # Use all CPU cores for speed\n        )\n\n        # Aggregate Results (Take the Mean of the folds)\n        metrics = {\"Model\": name}\n        for metric_name in current_scorers.keys():\n            # cross_validate returns keys like 'test_accuracy', 'test_f1', etc.\n            key = f\"test_{metric_name}\"\n            if key in cv_results:\n                metrics[metric_name] = np.mean(cv_results[key])\n            else:\n                metrics[metric_name] = np.nan\n\n        results_list.append(metrics)\n\n    # 5. Format Output\n    comparison_df = pd.DataFrame(results_list).set_index(\"Model\")\n    return comparison_df\n\n\nmodel_cv_metric_compare(models, X_train, y_train, cv=5)\n\n/Users/wnsong/miniforge3/lib/python3.12/multiprocessing/queues.py:122: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.\n  return _ForkingPickler.loads(res)\n/Users/wnsong/miniforge3/lib/python3.12/multiprocessing/queues.py:122: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.\n  return _ForkingPickler.loads(res)\n\n\n\n\n\n\n\n\n\naccuracy\nprecision\nrecall\nf1\nroc_auc\n\n\nModel\n\n\n\n\n\n\n\n\n\nDummy\n0.521429\n0.521429\n1.000000\n0.685271\n0.500000\n\n\nSVM\n0.757143\n0.763040\n0.809524\n0.772162\n0.869016\n\n\nKNN\n0.714286\n0.716078\n0.766667\n0.735105\n0.780513\n\n\nDecisionTree\n0.771429\n0.804514\n0.751429\n0.771691\n0.813294\n\n\nRandomForest\n0.735714\n0.759034\n0.754286\n0.737826\n0.848590"
+  },
+  {
+    "objectID": "CONTRIBUTING.html",
+    "href": "CONTRIBUTING.html",
+    "title": "",
+    "section": "",
+    "text": "Consistency in coding style is important throughout the project. We recommend following the official Python style guide (PEP 8). Key points include: - Indentation: Use consistent tabs or spaces to maintain readability. - Line Length: Keep lines reasonably short; avoid exceeding half the width of notebook cells if applicable. - Comments: Use # for comments and write them clearly to explain the code. - Whitespace: Include proper spacing around operators, function arguments, and within control structures. - Imports: Organize import statements in logical groups and in the recommended order (standard library, third-party packages, local modules). ## Pull Request Process  - It is recommended to create a Git branch for each pull request in order to maintain consistency. - Code should follow the official python style guide - We will be using Docstring for documentation. - We use pytest (assert). Contributions with test cases included will be easier to accept since we can check erros better. ## Code of Conduct  - Each contributor shall adhere to the examples set below: Use welcoming and inclusive language Be respectful of differing opinions and viewpoints Be cognizant of intention when proivding constructive criticism Recognize the best in others Show empathy towards community members Each contributor should avoid behaviours such as:\n\nSexualized language and unwanted sexual attention/advances Trolling, insults, derogatory comments, and political attacks Public or private harassment Ignoring privacy concerns of the community And other conduct which could reasonably be considered inappropriate in a professional setting"
+  },
+  {
+    "objectID": "CONTRIBUTING.html#coding-style",
+    "href": "CONTRIBUTING.html#coding-style",
+    "title": "",
+    "section": "",
+    "text": "Consistency in coding style is important throughout the project. We recommend following the official Python style guide (PEP 8). Key points include: - Indentation: Use consistent tabs or spaces to maintain readability. - Line Length: Keep lines reasonably short; avoid exceeding half the width of notebook cells if applicable. - Comments: Use # for comments and write them clearly to explain the code. - Whitespace: Include proper spacing around operators, function arguments, and within control structures. - Imports: Organize import statements in logical groups and in the recommended order (standard library, third-party packages, local modules). ## Pull Request Process  - It is recommended to create a Git branch for each pull request in order to maintain consistency. - Code should follow the official python style guide - We will be using Docstring for documentation. - We use pytest (assert). Contributions with test cases included will be easier to accept since we can check erros better. ## Code of Conduct  - Each contributor shall adhere to the examples set below: Use welcoming and inclusive language Be respectful of differing opinions and viewpoints Be cognizant of intention when proivding constructive criticism Recognize the best in others Show empathy towards community members Each contributor should avoid behaviours such as:\n\nSexualized language and unwanted sexual attention/advances Trolling, insults, derogatory comments, and political attacks Public or private harassment Ignoring privacy concerns of the community And other conduct which could reasonably be considered inappropriate in a professional setting"
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html",
+    "href": "CODE_OF_CONDUCT.html",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "Our goal is to create an open and welcoming environment where all team members feel comfortable contributing, making mistakes, and learning together, regardless of background, level of experience, age, disability, ethnicity, gender identity and expression, sexual orientation, nationality, personal appearance, race, or religion.\n\n\n\nSome examples of expected behavior include:\n\nuse welcoming and inclusive language\nprovide kind, constructive, and actionable feedback\nbe open and respectful of different ideas and points of view\ntreat others with respect and empathy\nbe collaborative: involve teammates in your work and thought processes, and ask for help and feedback often\ncompletely understand and fully cite all code produced by AI tools or adapted with permission from another source, and be able to discuss and explain all your code\nprofessional conduct in spoken and written language, including communication between team members as well as public facing writing for this project, such as written components of reports and Github Issues\nall communication should be in English\nwrite clear and concise Github Issues, commit messages, pull requests, PR feedback, and any other code communication\ndocument your code regularly, including function documentation and comments\ncommunicate frequently and promptly with team mates, especially if you encounter roadblocks or need support\nattend all labs and meetings, and communicate if you will be late or need to reschedule a meeting\n\nSome examples of unacceptable behavior include:\n\ndiscrimination or harrassment\nunwelcoming or exclusive language or behavior, including sexualized language or imagery and insulting/derogatory comments\nany behavior that violates MDS policies\nexcessive use of AI tools or adapted code from another source, use of AI tools or adapted code from another source without proper citation (plaigarism), and/or use of any code that you do not understand\nmissing labs or meetings without communication, or frequently being more than 5 minutes late to labs or meetings\ntaking more than 24 hours to respond to (or acknowledge with a timeline for response) messages while a lab is being worked on (i.e. Tuesday afternoon until Saturday at 6pm) without prior communication of limited availability\n\n\n\n\nAll contributors are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.\nAll contributors have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.\n\n\n\nThis Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.\n\n\n\nIf a team member notes unaccetable behavior in another team member related to use of AI tools or adapted code, lack of communication, or missing labs/meetings, they should attempt to provide one warning and/or initiate a group discussion with all team members, before taking the issues to the teaching team.\nIf the unacceptable behaviors persist after the first warning, the team will involve the teaching team, who may invoke disciplinary or grading action.\nInstances of unacceptable behavior by contributors outside of the project team can be reported by contacting the project team at daisy025@student.ubc.ca. The project team will review and investigate the complaints, and will respond accordingly. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.\nAll contributors who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project’s leadership.\n\n\n\nSections of this Code of Conduct have been adapted from the Breast Cancer Predictor Code of Conduct, which was copied from the tidyverse Code of Conduct, which was adapted from the Contributor Covenant, version 1.4, available at http://contributor-covenant.org/version/1/4."
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#statement-on-diversity-and-inclusion",
+    "href": "CODE_OF_CONDUCT.html#statement-on-diversity-and-inclusion",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "Our goal is to create an open and welcoming environment where all team members feel comfortable contributing, making mistakes, and learning together, regardless of background, level of experience, age, disability, ethnicity, gender identity and expression, sexual orientation, nationality, personal appearance, race, or religion."
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#expected-and-unacceptable-behaviour",
+    "href": "CODE_OF_CONDUCT.html#expected-and-unacceptable-behaviour",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "Some examples of expected behavior include:\n\nuse welcoming and inclusive language\nprovide kind, constructive, and actionable feedback\nbe open and respectful of different ideas and points of view\ntreat others with respect and empathy\nbe collaborative: involve teammates in your work and thought processes, and ask for help and feedback often\ncompletely understand and fully cite all code produced by AI tools or adapted with permission from another source, and be able to discuss and explain all your code\nprofessional conduct in spoken and written language, including communication between team members as well as public facing writing for this project, such as written components of reports and Github Issues\nall communication should be in English\nwrite clear and concise Github Issues, commit messages, pull requests, PR feedback, and any other code communication\ndocument your code regularly, including function documentation and comments\ncommunicate frequently and promptly with team mates, especially if you encounter roadblocks or need support\nattend all labs and meetings, and communicate if you will be late or need to reschedule a meeting\n\nSome examples of unacceptable behavior include:\n\ndiscrimination or harrassment\nunwelcoming or exclusive language or behavior, including sexualized language or imagery and insulting/derogatory comments\nany behavior that violates MDS policies\nexcessive use of AI tools or adapted code from another source, use of AI tools or adapted code from another source without proper citation (plaigarism), and/or use of any code that you do not understand\nmissing labs or meetings without communication, or frequently being more than 5 minutes late to labs or meetings\ntaking more than 24 hours to respond to (or acknowledge with a timeline for response) messages while a lab is being worked on (i.e. Tuesday afternoon until Saturday at 6pm) without prior communication of limited availability"
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#our-responsibilities",
+    "href": "CODE_OF_CONDUCT.html#our-responsibilities",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "All contributors are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.\nAll contributors have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful."
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#scope",
+    "href": "CODE_OF_CONDUCT.html#scope",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers."
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#enforcement",
+    "href": "CODE_OF_CONDUCT.html#enforcement",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "If a team member notes unaccetable behavior in another team member related to use of AI tools or adapted code, lack of communication, or missing labs/meetings, they should attempt to provide one warning and/or initiate a group discussion with all team members, before taking the issues to the teaching team.\nIf the unacceptable behaviors persist after the first warning, the team will involve the teaching team, who may invoke disciplinary or grading action.\nInstances of unacceptable behavior by contributors outside of the project team can be reported by contacting the project team at daisy025@student.ubc.ca. The project team will review and investigate the complaints, and will respond accordingly. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.\nAll contributors who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project’s leadership."
+  },
+  {
+    "objectID": "CODE_OF_CONDUCT.html#attribution",
+    "href": "CODE_OF_CONDUCT.html#attribution",
+    "title": "Code of Conduct",
+    "section": "",
+    "text": "Sections of this Code of Conduct have been adapted from the Breast Cancer Predictor Code of Conduct, which was copied from the tidyverse Code of Conduct, which was adapted from the Contributor Covenant, version 1.4, available at http://contributor-covenant.org/version/1/4."
+  },
+  {
+    "objectID": "CHANGELOG.html",
+    "href": "CHANGELOG.html",
+    "title": "Changelog",
+    "section": "",
+    "text": "All notable changes to this project will be documented in this file.\nThe format is based on Keep a Changelog, and this project adheres to Semantic Versioning.\n\n\n\nSecond release\n\n\n\n\nCode implementation for param_tuning_summary() in hyperparameter_tuning_summary.py\nCreate multiple tests in test_param_tuning_summary.py for param_tuning_summary() to work properly\nUpdate environment.yml\n\n\n\n\n\nCode implementation for model_evaluation_plotting() in model_evaluation.py\nCreate multiple tests in test_model_evaluation.py for model_evaluation_plotting() to work properly\nMilestone 2 README.md Descriptions\n\n\n\n\n\nCode implementation for model_cv_metric_compare() in model_compare.py\nCreate multiple tests in test_model_compare.py for model_cv_metric_compare() to work properly\nUpdate pyproject.toml with formal project name, path, and description for pytest to work properly\n\n\n\n\n\n\nFirst release\n\n\n\n\nFunction description/specification written without code implementation for param_tuning_summary() in hyperparameter_tuning_summary.py\nCODE_OF_CONDUCT.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_evaluation_plotting() in model_evaluation.py\nMilestone 1 README.md Descriptions.\nCONTRIBUTING.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_metric_compare() in model_compare.py\nAdded the skeleton of project structure including folders and empty files.\nAdded pyproject.toml with basic package information and Hatch environment setup."
+  },
+  {
+    "objectID": "CHANGELOG.html#section",
+    "href": "CHANGELOG.html#section",
+    "title": "Changelog",
+    "section": "",
+    "text": "Second release\n\n\n\n\nCode implementation for param_tuning_summary() in hyperparameter_tuning_summary.py\nCreate multiple tests in test_param_tuning_summary.py for param_tuning_summary() to work properly\nUpdate environment.yml\n\n\n\n\n\nCode implementation for model_evaluation_plotting() in model_evaluation.py\nCreate multiple tests in test_model_evaluation.py for model_evaluation_plotting() to work properly\nMilestone 2 README.md Descriptions\n\n\n\n\n\nCode implementation for model_cv_metric_compare() in model_compare.py\nCreate multiple tests in test_model_compare.py for model_cv_metric_compare() to work properly\nUpdate pyproject.toml with formal project name, path, and description for pytest to work properly"
+  },
+  {
+    "objectID": "CHANGELOG.html#section-1",
+    "href": "CHANGELOG.html#section-1",
+    "title": "Changelog",
+    "section": "",
+    "text": "First release\n\n\n\n\nFunction description/specification written without code implementation for param_tuning_summary() in hyperparameter_tuning_summary.py\nCODE_OF_CONDUCT.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_evaluation_plotting() in model_evaluation.py\nMilestone 1 README.md Descriptions.\nCONTRIBUTING.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_metric_compare() in model_compare.py\nAdded the skeleton of project structure including folders and empty files.\nAdded pyproject.toml with basic package information and Hatch environment setup."
+  },
+  {
+    "objectID": "DEVELOPMENT.html",
+    "href": "DEVELOPMENT.html",
+    "title": "Development Guide",
+    "section": "",
+    "text": "Welcome to your shiny new package. This page will help you get started with using Hatch to manage your package.\nIf you look at your project, you will see that a pyproject.toml file. This file stores both your package configuration and settings for development tools like Hatch that you will use to work on your package.\nThis file is written using a .toml format. You can learn more about toml here. Here’s the TL&DR:\n\nEach [] section in the toml file is called a table.\nYou can nest tables with double brackets like this[[]]\nTables contain information about a element that you want to configure.\n\nWe are using Hatch as the default packaging tool. Hatch allows you to configure and run environments and scripts similar to workflow tools like tox or nox.\nHach, by default, uses virtual environments (venv) to manage environments. But you can configure it to use other environment tools.Read the hatch documentation to learn more about environments.\nFor this template, we have set up Hatch environments for you to use. At the bottom of your pyproject.toml file, notice a hatch environment section that looks like this:\n########################################\n# Hatch Environments\n########################################\nBelow is the Hatch environment to install your package. Notice that it defines pip and twine as two packages that the environment needs.\n[tool.hatch.envs.build]\ndescription = \"\"\"Test the installation the package.\"\"\"\ndependencies = [\n    \"pip\",\n    \"twine\",\n]\nThe table below defines the scripts that you will run build and check your package.\n[tool.hatch.envs.build.scripts]\ncheck = [\n    \"pip check\",\n    \"hatch build {args:--clean}\",\n    \"twine check dist/*\",\n]\ndetached = true\nYou can enter that environment to check it out:\n$ hatch shell build\nIf you run pip list, in the environment, twine will be there:\n$ pip list\nHatch by default, installs your package in editable mode (-e) into its virtual environments. But if detached=True is set, then it will skip installing your package into the virtual enviornment.\n\n\nBelow you see the Hatch environment test table.\ntool.hatch.envs says, “Hey, Hatch, this is the definition for an environment.” test is the name of the environment.\nThe environment below defines the dependencies that Hatch needs to install into the environment named test.\n[tool.hatch.envs.test]\ndescription = \"\"\"Run the test suite.\"\"\"\ndependencies = [\n    \"pytest\",\n    \"pytest-cov\",\n    \"pytest-raises\",\n    \"pytest-randomly\",\n    \"pytest-xdist\",\n]\nTo enter a Hatch environment use:\nhatch shell environmentname\nSo you can enter the test environment above with:\nhatch shell test\n\n\n\nIf the environment has a matrix associated with it, that tells Hatch to run the test scripts across different Python versions.\n[[tool.hatch.envs.test.matrix]]\npython = [\"3.10\", \"3.11\", \"3.12\", \"3.13\"]\nIf you run hatch shell test, you will see the output below. To enter an environment with a matrix attached to it, you need to pick the Python environment version that you want to open.\n$ hatch shell test                           \nEnvironment `test` defines a matrix, choose one of the following instead:\n\ntest.py3.10\ntest.py3.11\ntest.py3.12\ntest.py3.13\nOpen the Python 3.13 environment like this:\n$ hatch shell test.py3.13\nTo leave an environment use:\n$ deactivate\n\n\n\nIn the tests section of your pyproject.toml, you will see a tool.hatch.envs.test.scripts table.\nThis table defines the commands that you want Hatch to run in the test environment. Notice that the script has one command called run.\n[tool.hatch.envs.test.scripts]\nrun = \"pytest {args:--cov=greatproject --cov-report=term-missing}\"\nTo run this script , use:\nhatch run test:run\n\nhatch run: calls Hatch and tells it that it will be running a command\ntest:run: defines the environment you want it to run (test) and defines the name of the “script” to berun.\n\nIf you have a Hatch matrix setup for tests, it will both install the necessary Python version using UV and run your tests on each version of the Python versions that you declare in the matrix table. In this case, there are 4 Python versions in the environment, so your tests will run 4 times, once in each Python version listed in the matrix table.\n@lwasser ➜ /workspaces/pyopensci-scipy25-create-python-package (main) $ hatch run test:run\n──────────────────────────────────────────────────────────────────────── test.py3.10 ────────────────────────────────────────────────────────────────────────\n==================================================================== test session starts ====================================================================\nplatform linux -- Python 3.10.16, pytest-8.4.1, pluggy-1.6.0\nUsing --randomly-seed=1490740387\nrootdir: /workspaces/pyopensci-scipy25-create-python-package\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: xdist-3.8.0, randomly-3.16.0, raises-0.11, cov-6.2.1\ncollected 2 items                                                                                                                                           \n\ntests/system/test_import.py .                                                                                                                         [ 50%]\ntests/unit/test_example.py .                                                                                                                          [100%]\n\n====================================================================== tests coverage =======================================================================\n_____________________________________________________ coverage: platform linux, python 3.10.16-final-0 ______________________________________________________\n\nName                           Stmts   Miss Branch BrPart    Cover   Missing\n----------------------------------------------------------------------------\nsrc/greatproject/__init__.py       0      0      0      0  100.00%\nsrc/greatproject/example.py        2      0      0      0  100.00%\n----------------------------------------------------------------------------\nTOTAL                              2      0      0      0  100.00%\n===================================================================== 2 passed in 0.05s =====================================================================\n──────────────────────────────────────────────────────────────────────── test.py3.11 ────────────────────────────────────────────────────────────────────────\n==================================================================== test session starts ====================================================================\nplatform linux -- Python 3.11.12, pytest-8.4.1, pluggy-1.6.0\nUsing --randomly-seed=1596865075\nrootdir: /workspaces/pyopensci-scipy25-create-python-package\nconfigfile: pyproject.toml\ntestpaths: tests\nplugins: xdist-3.8.0, randomly-3.16.0, raises-0.11, cov-6.2.1\ncollected 2 items                                                                                                                                           \n\ntests/system/test_import.py .                                                                                                                         [ 50%]\ntests/unit/test_example.py .                                                                                                                          [100%]\n\n====================================================================== tests coverage =======================================================================\n_____________________________________________________ coverage: platform linux, python 3.11.12-final-0 ______________________________________________________\n\nName                           Stmts   Miss Branch BrPart    Cover   Missing\n----------------------------------------------------------------------------\nsrc/greatproject/__init__.py       0      0      0      0  100.00%\nsrc/greatproject/example.py        2      0      0      0  100.00%\n----------------------------------------------------------------------------\nTOTAL                              2      0      0      0  100.00%\n===================================================================== 2 passed in 0.05s =====================================================================\n\n\n\nYou can build your package using the environment and scripts defined in the build tables:\nhatch run build:check\nThis script builds and checks the output distribution files of your package.\nThis build environment table declares that pip and twine should be added to that environment. Adding pip to the environment ensures that it is a current, up-to-date version.\n[tool.hatch.envs.build]\ndescription = \"\"\"Build and test your package.\"\"\"\ndependencies = [\n    \"pip\",\n    \"twine\",\n]\ndetached = true\n# This table installs created the command hatch run install:check which will build and check your package.\n[tool.hatch.envs.install.scripts]\ncheck = [\n    \"pip check\",\n    \"hatch build {args:--clean}\",\n    \"twine check dist/*\",\n]\nThis uses the above environment and tells hatch to run\n\npip check, # verifies your dependencies\nhatch build --clean\n\ntwine check dist/* # this checks your distribution for metadata and other potential issues. to build and test your package."
+  },
+  {
+    "objectID": "DEVELOPMENT.html#build-your-package",
+    "href": "DEVELOPMENT.html#build-your-package",
+    "title": "Development Guide",
+    "section": "",
+    "text": "You can build your package using the environment and scripts defined in the build tables:\nhatch run build:check\nThis script builds and checks the output distribution files of your package.\nThis build environment table declares that pip and twine should be added to that environment. Adding pip to the environment ensures that it is a current, up-to-date version.\n[tool.hatch.envs.build]\ndescription = \"\"\"Build and test your package.\"\"\"\ndependencies = [\n    \"pip\",\n    \"twine\",\n]\ndetached = true\n# This table installs created the command hatch run install:check which will build and check your package.\n[tool.hatch.envs.install.scripts]\ncheck = [\n    \"pip check\",\n    \"hatch build {args:--clean}\",\n    \"twine check dist/*\",\n]\nThis uses the above environment and tells hatch to run\n\npip check, # verifies your dependencies\nhatch build --clean\n\ntwine check dist/* # this checks your distribution for metadata and other potential issues. to build and test your package."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher\n\n\n\nCreating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow.\n\n\n\n\nparam_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. \n\n\n\n\nThis package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.\n\n\n\nThis project is fully reproducible given the steps below. All experiments can be rerun end-to-end.\n\n\n\n# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interpretation\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\n# If tests were installed in step 3\n# For more details, see tests/README.md, linked below\npytest\n\n# 5. Run analysis / main workflow\npython src/model_auto_interpret/&lt;MAIN_SCRIPT&gt;.py\n\n\n\nTests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory.\n\n\n\nname: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune\n\n\n\nThe software code contained within this repository is licensed under the MIT license. See the license file for more information."
+  },
+  {
+    "objectID": "index.html#contributors",
+    "href": "index.html#contributors",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher"
+  },
+  {
+    "objectID": "index.html#project-description",
+    "href": "index.html#project-description",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Creating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow."
+  },
+  {
+    "objectID": "index.html#list-of-functions",
+    "href": "index.html#list-of-functions",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "param_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization."
+  },
+  {
+    "objectID": "index.html#positioning-in-the-python-ecosystem",
+    "href": "index.html#positioning-in-the-python-ecosystem",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "This package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development."
+  },
+  {
+    "objectID": "index.html#reproducibility",
+    "href": "index.html#reproducibility",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "This project is fully reproducible given the steps below. All experiments can be rerun end-to-end."
+  },
+  {
+    "objectID": "index.html#quickstart",
+    "href": "index.html#quickstart",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interpretation\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\n# If tests were installed in step 3\n# For more details, see tests/README.md, linked below\npytest\n\n# 5. Run analysis / main workflow\npython src/model_auto_interpret/&lt;MAIN_SCRIPT&gt;.py"
+  },
+  {
+    "objectID": "index.html#running-the-test-suite",
+    "href": "index.html#running-the-test-suite",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Tests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory."
+  },
+  {
+    "objectID": "index.html#environment-and-dependencies",
+    "href": "index.html#environment-and-dependencies",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "name: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune"
+  },
+  {
+    "objectID": "index.html#license",
+    "href": "index.html#license",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "The software code contained within this repository is licensed under the MIT license. See the license file for more information."
+  },
+  {
+    "objectID": "reference/model_evaluation.html",
+    "href": "reference/model_evaluation.html",
+    "title": "model_evaluation",
+    "section": "",
+    "text": "model_evaluation\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.html#functions",
+    "href": "reference/model_evaluation.html#functions",
+    "title": "model_evaluation",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "hyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#parameters",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#parameters",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#returns",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#returns",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.html",
+    "href": "reference/model_compare.html",
+    "title": "model_compare",
+    "section": "",
+    "text": "model_compare\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.html#functions",
+    "href": "reference/model_compare.html#functions",
+    "title": "model_compare",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare"
+    ]
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/index.html#model-interpretation-methods",
+    "href": "reference/index.html#model-interpretation-methods",
+    "title": "Function reference",
+    "section": "",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "crumbs": [
+      "Reference",
+      "Function reference"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.html",
+    "href": "reference/hyperparameter_tuning_summary.html",
+    "title": "hyperparameter_tuning_summary",
+    "section": "",
+    "text": "hyperparameter_tuning_summary\n\n\n\n\n\nName\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.html#functions",
+    "href": "reference/hyperparameter_tuning_summary.html#functions",
+    "title": "hyperparameter_tuning_summary",
+    "section": "",
+    "text": "Name\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary"
+    ]
+  }
+]

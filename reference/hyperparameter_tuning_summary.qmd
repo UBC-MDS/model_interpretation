@@ -1,0 +1,32 @@
+# hyperparameter_tuning_summary { #model_auto_interpret.hyperparameter_tuning_summary }
+
+`hyperparameter_tuning_summary`
+
+
+
+## Functions
+
+| Name | Description |
+| --- | --- |
+| [param_tuning_summary](#model_auto_interpret.hyperparameter_tuning_summary.param_tuning_summary) | Create a summary of the hyperparameter tuning results and extract the best estimator |
+
+### param_tuning_summary { #model_auto_interpret.hyperparameter_tuning_summary.param_tuning_summary }
+
+```python
+hyperparameter_tuning_summary.param_tuning_summary(param_search_cv)
+```
+
+Create a summary of the hyperparameter tuning results and extract the best estimator
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name            | Type   | Description   | Default    |
+|-----------------|--------|---------------|------------|
+| param_search_cv |        |               | _required_ |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name           | Type                                           | Description                                                                  |
+|----------------|------------------------------------------------|------------------------------------------------------------------------------|
+| df_summary     | pandas.DataFrame                               | a Dataframe containing the best set of parameters' names, values and scores. |
+| best_estimator | the best model with the best set of parameters |                                                                              |

@@ -1,0 +1,11 @@
+# Function reference {.doc .doc-index}
+
+## Model Interpretation Methods
+
+Functions to help interpret machine learning models.
+
+| | |
+| --- | --- |
+| [hyperparameter_tuning_summary](hyperparameter_tuning_summary.qmd#model_auto_interpret.hyperparameter_tuning_summary) |  |
+| [model_compare](model_compare.qmd#model_auto_interpret.model_compare) |  |
+| [model_evaluation](model_evaluation.qmd#model_auto_interpret.model_evaluation) |  |
