@@ -191,3 +191,64 @@ def test_param_tuning_summary_gridsearch_vs_randomized(fitted_grid_search, fitte
     assert hasattr(random_estimator, 'predict')
     assert len(grid_df) == len(random_df) == 2, \
         "Both should have 2 parameters (svc__C and svc__kernel)"
+    
+# additional test functions added 
+
+def test_param_tuning_summary_multiple_parameters(X_train, y_train):
+    """
+    Test that make sure the function handles GridSearchCV with multiple hyperparameters. 
+    """
+
+    # create a grid with over 2 parameters
+    param_grid = {
+        'svc__C': [0.1, 1, 10],
+        'svc__kernel': ['linear', 'rbf'],
+        'svc__gamma': ['scale', 'auto']
+    }
+    
+    # create a grid_search instance with the param_grid created
+    grid_search = GridSearchCV(
+        make_pipeline(StandardScaler(), SVC(random_state=123)),
+        param_grid,
+        cv=3
+    )
+
+    grid_search.fit(X_train, y_train)
+    
+    df_summary, best_estimator = param_tuning_summary(grid_search)
+    
+    # check if the summary has 3 rows 
+    assert len(df_summary) == 3, "The output Dtaframe should have 3 rows as there are 3 parameters"
+
+def test_param_tuning_summary_parameter_value_types(fitted_grid_search):
+    """
+    Make sure the function preserves different parameter data types:
+    The 'Value' column should maintain the original data types from the best parameters.
+    """
+    df_summary, _ = param_tuning_summary(fitted_grid_search)
+
+    best_params = fitted_grid_search.best_params_
+
+    for _, row in df_summary.iterrows():
+        df_name = row['Parameter']
+        df_value = row['Value']
+        
+        # make sure the value in the output Dataframe is the same as the expected value as well as the data type.
+        expected_value = best_params[df_name]
+        assert df_value == expected_value, f"Parameter {param_name} value should be {expected_value}, got {param_value}"
+        assert type(df_value) == type(expected_value), f"Parameter {df_name} type should be {type(expected_value)}, got {type(param_value)}"
+
+
+def test_param_tuning_summary_consistency_across_calls(fitted_grid_search):
+    """
+    Test that the function will produce identical outputs even after being called for multiple times
+    """
+    # call the function twice
+    df_summary1, best_estimator1 = param_tuning_summary(fitted_grid_search)
+    df_summary2, best_estimator2 = param_tuning_summary(fitted_grid_search)
+    
+    # the output DataFrames should be identical
+    pd.testing.assert_frame_equal(df_summary1, df_summary2, check_dtype=True, check_exact=True)
+    
+    # Estimators should be the same object (not just equal, but identical)
+    assert best_estimator1 is best_estimator2, "The estimators returned should be the same."
