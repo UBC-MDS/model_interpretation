@@ -18,11 +18,33 @@ Creating machine learning models often involves writing redundant code, particul
 
 This package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.
 
+## Installation
+
+#### Install From PyPI:
+
+``` base
+pip install model-auto-interpret
+```
+
+#### Development Installation:
+
+``` base
+git clone https://github.com/UBC-MDS/model_interpretation.git
+cd model_interpretation
+pip install -e .
+```
+
+#### To Include Dependencies:
+
+``` base
+pip install -e ".[tests]"
+```
+
 ## Reproducibility
 
 This project is fully reproducible given the steps below. All experiments can be rerun end-to-end.
 
-## Quickstart
+## Run from Source (Development)
 
 ``` bash
 # 1. Clone the repository
@@ -31,7 +53,7 @@ cd model_interpretation
 
 # 2. Create and activate environment
 conda env create -f environment.yml
-conda activate model_interpretation
+conda activate model_interp
 
 # 3. Install the package
 # Exclude tests if not needed
@@ -43,15 +65,11 @@ pip install -e ".[tests]"
 # If tests were installed in step 3
 # For more details, see tests/README.md, linked below
 pytest
-
-# 5. Run analysis / main workflow
-python src/model_auto_interpret/<MAIN_SCRIPT>.py
 ```
 
 ## Running the test suite
-Tests are run using the `pytest` command in the root of the project.
-More details about the test suite and to run tests can be found in the 
-[`tests`](tests) directory.
+
+Tests are run using the `pytest` command in the root of the project. More details about the test suite and to run tests can be found in the [`tests`](tests) directory.
 
 ## Environment and Dependencies
 
