@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.1.1] - (2026-01-24)
+
+- Third release
+
+### Changes Added by @daisyzhou-ubc
+- Create build.yml
+- Create additional tests
+
+### Changes Added by @ybaher
+- Create deploy.yml
+- Add TestPyPI token
+- Implement Github Actions for deployment
+- Update README.md with deployment instructions
+
+### Changes Added by @canadasung
+- Create doc.yml for generating documentation site
+- Create _quarto.yml for documentation site configuration
+- Update ChangeLog.md with new version information
+
+
 ## [0.0.2] - (2026-01-16)
 
 - Second release
