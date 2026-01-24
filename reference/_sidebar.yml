@@ -3,9 +3,9 @@ website:
   - contents:
     - reference/index.qmd
     - contents:
-      - reference/hyperparameter_tuning_summary.qmd
-      - reference/model_compare.qmd
-      - reference/model_evaluation.qmd
+      - reference/hyperparameter_tuning_summary.param_tuning_summary.qmd
+      - reference/model_compare.model_cv_metric_compare.qmd
+      - reference/model_evaluation.model_evaluation_plotting.qmd
       section: Model Interpretation Methods
     id: reference
   - id: dummy-sidebar

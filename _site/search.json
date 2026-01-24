@@ -179,24 +179,14 @@
     "href": "reference/model_evaluation.html",
     "title": "model_evaluation",
     "section": "",
-    "text": "model_evaluation\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
-    "crumbs": [
-      "Reference",
-      "Model Interpretation Methods",
-      "model_evaluation"
-    ]
+    "text": "model_evaluation\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs."
   },
   {
     "objectID": "reference/model_evaluation.html#functions",
     "href": "reference/model_evaluation.html#functions",
     "title": "model_evaluation",
     "section": "",
-    "text": "Name\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
-    "crumbs": [
-      "Reference",
-      "Model Interpretation Methods",
-      "model_evaluation"
-    ]
+    "text": "Name\nDescription\n\n\n\n\nmodel_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\nmodel_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs."
   },
   {
     "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
@@ -239,31 +229,21 @@
     "href": "reference/model_compare.html",
     "title": "model_compare",
     "section": "",
-    "text": "model_compare\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
-    "crumbs": [
-      "Reference",
-      "Model Interpretation Methods",
-      "model_compare"
-    ]
+    "text": "model_compare\n\n\n\n\n\nName\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics."
   },
   {
     "objectID": "reference/model_compare.html#functions",
     "href": "reference/model_compare.html#functions",
     "title": "model_compare",
     "section": "",
-    "text": "Name\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
-    "crumbs": [
-      "Reference",
-      "Model Interpretation Methods",
-      "model_compare"
-    ]
+    "text": "Name\nDescription\n\n\n\n\nmodel_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\n\n\n\nmodel_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics."
   },
   {
     "objectID": "reference/index.html",
     "href": "reference/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.",
     "crumbs": [
       "Reference",
       "Function reference"
@@ -274,7 +254,7 @@
     "href": "reference/index.html#model-interpretation-methods",
     "title": "Function reference",
     "section": "",
-    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary\n\n\n\nmodel_compare\n\n\n\nmodel_evaluation",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.",
     "crumbs": [
       "Reference",
       "Function reference"
@@ -285,23 +265,109 @@
     "href": "reference/hyperparameter_tuning_summary.html",
     "title": "hyperparameter_tuning_summary",
     "section": "",
-    "text": "hyperparameter_tuning_summary\n\n\n\n\n\nName\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
-    "crumbs": [
-      "Reference",
-      "Model Interpretation Methods",
-      "hyperparameter_tuning_summary"
-    ]
+    "text": "hyperparameter_tuning_summary\n\n\n\n\n\nName\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters"
   },
   {
     "objectID": "reference/hyperparameter_tuning_summary.html#functions",
     "href": "reference/hyperparameter_tuning_summary.html#functions",
     "title": "hyperparameter_tuning_summary",
     "section": "",
-    "text": "Name\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "text": "Name\nDescription\n\n\n\n\nparam_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters"
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "model_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
     "crumbs": [
       "Reference",
       "Model Interpretation Methods",
-      "hyperparameter_tuning_summary"
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html#parameters",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html#parameters",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html#returns",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html#returns",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html#raises",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html#raises",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html",
+    "href": "reference/model_compare.model_cv_metric_compare.html",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "model_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html#parameters",
+    "href": "reference/model_compare.model_cv_metric_compare.html#parameters",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html#scorers-evaluated",
+    "href": "reference/model_compare.model_cv_metric_compare.html#scorers-evaluated",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "accuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html#returns",
+    "href": "reference/model_compare.model_cv_metric_compare.html#returns",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "Name\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "crumbs": [
+      "Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
     ]
   }
 ]
