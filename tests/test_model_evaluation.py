@@ -108,3 +108,8 @@ def test_model_evaluation_plotting_length_mismatch(pipeline, X_train, y_train):
     X_short = X_train.iloc[:-1]
     with pytest.raises((ValueError, Exception)):
         model_evaluation_plotting(pipeline, X_short, y_train)
+
+
+def test_model_evaluation_plotting_pipeline_not_fitted(pipeline, X_train, y_train):
+    with pytest.raises(Exception):
+        model_evaluation_plotting(pipeline, X_train, y_train)
