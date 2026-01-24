@@ -1,0 +1,11 @@
+website:
+  sidebar:
+  - contents:
+    - reference/index.qmd
+    - contents:
+      - reference/hyperparameter_tuning_summary.qmd
+      - reference/model_compare.qmd
+      - reference/model_evaluation.qmd
+      section: Model Interpretation Methods
+    id: reference
+  - id: dummy-sidebar
