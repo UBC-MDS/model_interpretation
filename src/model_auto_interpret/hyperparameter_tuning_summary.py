@@ -22,6 +22,26 @@ def param_tuning_summary(param_search_cv):
         a Dataframe containing the best set of parameters' names, values and scores.
     
     best_estimator: the best model with the best set of parameters
+    
+    Examples
+    --------
+    >>> from sklearn.svm import SVC
+    >>> from sklearn.model_selection import GridSearchCV
+    >>> from sklearn.datasets import load_iris
+    >>> 
+    >>> X, y = load_iris(return_X_y=True)
+    >>> param_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}
+    >>> grid_search = GridSearchCV(SVC(), param_grid, cv=5)
+    >>> grid_search.fit(X, y)
+    GridSearchCV(...)
+    >>> 
+    >>> summary_df, best_estimator = param_tuning_summary(grid_search)
+    >>> print(summary_df)
+       Parameter  Value  Best_Score
+    0          C    1.0    0.980000
+    1     kernel    rbf    0.980000
+    >>> print(type(best_estimator))
+    <class 'sklearn.svm._classes.SVC'>
     """
     # Validate input type
     if not isinstance(param_search_cv, (GridSearchCV, RandomizedSearchCV)):
