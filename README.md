@@ -26,50 +26,118 @@ This package is designed to effectively sit within the existing Python machine l
 
 ## Installation
 
-#### Install From PyPI:
+### Prerequisites
 
-``` base
+- Python 3.10 or higher
+- pip package manager
+- (Optional) conda for environment management
+
+### Option 1: Install from PyPI (Recommended for Users)
+
+Install the latest stable version:
+```bash
 pip install model-auto-interpret
 ```
 
-#### Development Installation:
+### Option 2: Install from Source (For Development)
 
-``` base
-git clone https://github.com/UBC-MDS/model_interpretation.git
-cd model_interpretation
-pip install -e .
-```
-
-#### To Include Dependencies:
-
-``` base
-pip install -e ".[tests]"
-```
-
-## Reproducibility
-
-This project is fully reproducible given the steps below. All experiments can be rerun end-to-end.
-
-## Run from Source (Development)
-
-``` bash
+For contributors or those who want the latest development version:
+```bash
 # 1. Clone the repository
 git clone https://github.com/UBC-MDS/model_interpretation.git
 cd model_interpretation
 
-# 2. Create and activate environment
+# 2. Create and activate a conda environment (recommended)
 conda env create -f environment.yml
 conda activate model_interp
 
-# 3. Install the package
-# Exclude tests if not needed
-pip install -e .
-# Include tests if needed
-pip install -e ".[tests]"
+# Alternative: Use venv instead of conda
+# python -m venv venv
+# source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 4. Run tests
+# 3. Install the package in editable mode
+pip install -e .
+
+# 4. (Optional) Install development dependencies
+pip install -e ".[dev]"      # For linting and formatting
+pip install -e ".[tests]"    # For running tests  
+pip install -e ".[docs]"     # For building documentation
+
+# 5. Run tests to verify installation
 pytest
 ```
+
+## Quick Start
+
+Here's a complete example showing all three main functions:
+```python
+from model_auto_interpret import (
+    param_tuning_summary,
+    model_cv_metric_compare,
+    model_evaluation_plotting
+)
+from sklearn.datasets import load_iris
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
+
+# Load and prepare data
+X, y = load_iris(return_X_y=True)
+X = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+y = pd.Series(y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Example 1: Hyperparameter Tuning Summary
+param_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}
+grid_search = GridSearchCV(SVC(), param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+summary_df, best_model = param_tuning_summary(grid_search)
+print("Best Parameters:")
+print(summary_df)
+
+# Example 2: Compare Multiple Models  
+models = {
+    'SVC': SVC(),
+    'RandomForest': RandomForestClassifier(),
+    'LogisticRegression': LogisticRegression(max_iter=1000)
+}
+
+comparison_df = model_cv_metric_compare(models, X_train, y_train, cv=5)
+print("\nModel Comparison:")
+print(comparison_df)
+
+# Example 3: Evaluate and Visualize
+metrics, cm_table, cm_display = model_evaluation_plotting(
+    best_model,
+    X_test,
+    y_test,
+    display_labels=['setosa', 'versicolor', 'virginica']
+)
+
+print("\nEvaluation Metrics:")
+print(metrics)
+
+# Display confusion matrix
+cm_display.plot()
+plt.show()
+```
+
+**For more detailed examples and tutorials, visit our [documentation website](https://ubc-mds.github.io/model_interpretation/).**
+
+### Verify Installation
+
+After installation, verify everything works:
+```python
+import model_auto_interpret
+print(f"Version: {model_auto_interpret.__version__}")
+```
+
+Expected output: `Version: 0.1.2` (or current version)
 
 ## Running the test suite
 
