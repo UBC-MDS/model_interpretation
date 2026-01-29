@@ -2,7 +2,7 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Package Version](https://img.shields.io/badge/version-0.4.0-green.svg)](https://github.com/UBC-MDS/model_interpretation)
+[![Package Version](https://img.shields.io/badge/version-0.0.4-green.svg)](https://github.com/UBC-MDS/model_interpretation)
 [![Build Status](https://github.com/UBC-MDS/model_interpretation/actions/workflows/build.yml/badge.svg)](https://github.com/UBC-MDS/model_interpretation/actions)
 
 
