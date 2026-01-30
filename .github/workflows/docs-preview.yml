@@ -36,8 +36,6 @@ jobs:
           pip install -e .[docs]
           pip install quartodoc
 
-      
-
       - name: Build documentation
         run: |
           quartodoc build
@@ -104,3 +102,4 @@ jobs:
           env: ${{ steps.deployment.outputs.env }}
           env_url: ${{ steps.netlify.outputs.url }}
           logs: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          quarto render
