@@ -58,7 +58,7 @@ This package is designed to effectively sit within the existing Python machine l
 Install the latest stable version:
 
 ``` bash
-pip install model-auto-interpret
+pip install -i https://test.pypi.org/simple/model-auto-interpret
 ```
 
 ### Option 2: Install from Source (For Development)
