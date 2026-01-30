@@ -41,6 +41,7 @@ jobs:
       - name: Build documentation
         run: |
           quartodoc build
+<<<<<<< HEAD
         # quarto render
 
       - name: Render Quarto Project
@@ -104,3 +105,6 @@ jobs:
           env: ${{ steps.deployment.outputs.env }}
           env_url: ${{ steps.netlify.outputs.url }}
           logs: 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+=======
+          quarto render
+>>>>>>> a4eef74 (Simplify docs preview workflow by removing comment step)
