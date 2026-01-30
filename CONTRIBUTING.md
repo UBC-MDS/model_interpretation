@@ -25,3 +25,19 @@ Trolling, insults, derogatory comments, and political attacks
 Public or private harassment
 Ignoring privacy concerns of the community
 And other conduct which could reasonably be considered inappropriate in a professional setting
+
+## Development tools, GitHub infrastructure, and practices used <br>
+
+Throughout this project, our team was able to apply various tools used in software engineering and practices in a real-life data science and machine learning workflow. We were able to leverage Git and GitHub for version control, and had a collaborative process throughout the projects - through pull requests, code reviews, and issue tracking. With these tools, we were able to manage changes systematically and document any design changes, and keep a traceable project history. <br>
+
+We were able to create and structure our project as a Python package with the use of a `pyproject.toml`, which encouraged reproducibility, and made dependency management explicit. We were also able to embed testing the with the use of pytest which was integrated into a **GitHub Actions CI pipeline** allowing tests to run automatically upon each push and pull request. This would allow the quality of the code to stay intact and helped us catch errors fast and quickly. <br>
+
+For the purpose of documentation, our team used **Quarto and quartodoc** in order to generate a user-facing documentation from the codebase directly. We leveraged **Netlify** in order to automate build and deployment, which ensured documentations to stay synced with our code. Furthermore, we encouraged and implemented organizational practices such as standard code design, and a clear and well-documented README. <br>
+
+## Scaling the project: tools and practices <br>
+
+If we were to scale up this project, we would implement stricter CI checks, and add branch protection rules that required passing certain tests before merging. Furthermore, we would use semantic versioning and automated release for the workflows, ensuring that our deployments are stable. <br>
+
+For infrastructure, Docker would be used in order to ensure consistent environment and documentation across all development and deployment which would help for scalable computation and storage if the project was involved in a larger dataset. We would also make sure that all logging, and dependency security would be monitored as well, so the project remains reliable as it grows. <br>
+
+Overall, these tools and practices would help with the reproducibility, collaboration, and reliability of the project, and would scale organically from small academic projects to production-level systems. <br>
