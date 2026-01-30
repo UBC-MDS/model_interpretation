@@ -10,7 +10,7 @@ website:
       - text: "Home"
         file: index.qmd        
       - text: "Tutorial"
-        file: docs/tutorial.md      
+        file: docs/tutorial.qmd      
       - text: "API Reference"
         file: reference/index.qmd
     right:
