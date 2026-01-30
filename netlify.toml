@@ -1,6 +1,15 @@
 [build]
-  # Command to build your documentation
-  command = "pip install -e .[docs] && quartodoc build && quarto render"
+  # Command to build your documentation with Quarto CLI installation
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
   
   # Directory containing the built documentation
   publish = "_site"
@@ -11,15 +20,42 @@
 
 # Configuration for deploy previews (PR previews)
 [context.deploy-preview]
-  command = "pip install -e .[docs] && quartodoc build && quarto render"
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
 
 # Configuration for branch deploys
 [context.branch-deploy]
-  command = "pip install -e .[docs] && quartodoc build && quarto render"
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
 
 # Configuration for production (main branch)
 [context.production]
-  command = "pip install -e .[docs] && quartodoc build && quarto render"
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
