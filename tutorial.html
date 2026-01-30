@@ -184,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="setup-and-data-loading" class="level2">
 <h2 class="anchored" data-anchor-id="setup-and-data-loading">Setup and Data Loading</h2>
-<div id="e0876b0b" class="cell" data-execution_count="1">
+<div id="f9b58301" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import all necessary libraries</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -238,7 +238,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="example-1.1-gridsearchcv-with-svc" class="level3">
 <h3 class="anchored" data-anchor-id="example-1.1-gridsearchcv-with-svc">Example 1.1: GridSearchCV with SVC</h3>
-<div id="0755c5dd" class="cell" data-execution_count="2">
+<div id="96b88448" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameter grid to search</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>param_grid <span class="op">=</span> {</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'C'</span>: [<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="dv">10</span>, <span class="dv">100</span>],</span>
@@ -281,7 +281,7 @@ Best Cross-Validation Score: 0.9714</code></pre>
 </section>
 <section id="example-1.2-randomizedsearchcv-with-random-forest" class="level3">
 <h3 class="anchored" data-anchor-id="example-1.2-randomizedsearchcv-with-random-forest">Example 1.2: RandomizedSearchCV with Random Forest</h3>
-<div id="6cd1183f" class="cell" data-execution_count="3">
+<div id="bde1a973" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameter distributions for randomized search</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>param_distributions <span class="op">=</span> {</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'n_estimators'</span>: randint(<span class="dv">50</span>, <span class="dv">200</span>),</span>
@@ -338,7 +338,7 @@ Performing randomized search...
 </section>
 <section id="example-2.1-basic-model-comparison" class="level3">
 <h3 class="anchored" data-anchor-id="example-2.1-basic-model-comparison">Example 2.1: Basic Model Comparison</h3>
-<div id="53e633c8" class="cell" data-execution_count="4">
+<div id="4c60b471" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define multiple models to compare</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> {</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Logistic Regression'</span>: LogisticRegression(max_iter<span class="op">=</span><span class="dv">1000</span>, random_state<span class="op">=</span><span class="dv">42</span>),</span>
@@ -472,7 +472,7 @@ Best Accuracy: 0.9582</code></pre>
 </section>
 <section id="example-2.3-examining-all-metrics" class="level3">
 <h3 class="anchored" data-anchor-id="example-2.3-examining-all-metrics">Example 2.3: Examining All Metrics</h3>
-<div id="f4b05d27" class="cell" data-execution_count="6">
+<div id="14cad96d" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display all metrics for better comparison</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Detailed Metrics for All Models ==="</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(comparison_df.<span class="bu">round</span>(<span class="dv">4</span>))</span>
@@ -513,7 +513,7 @@ SVC (RBF)            0.927768</code></pre>
 </section>
 <section id="example-3.1-evaluate-best-model" class="level3">
 <h3 class="anchored" data-anchor-id="example-3.1-evaluate-best-model">Example 3.1: Evaluate Best Model</h3>
-<div id="85126c6f" class="cell" data-execution_count="7">
+<div id="3756e608" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the best estimator from grid search</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>best_model <span class="op">=</span> best_estimator</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -586,7 +586,7 @@ Figure&nbsp;2: Confusion matrix for breast cancer classification
 </section>
 <section id="example-3.3-compare-multiple-models-on-test-set" class="level3">
 <h3 class="anchored" data-anchor-id="example-3.3-compare-multiple-models-on-test-set">Example 3.3: Compare Multiple Models on Test Set</h3>
-<div id="db07186e" class="cell" data-execution_count="9">
+<div id="e4b11f40" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate all models on test set</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">=== Test Set Performance Comparison ==="</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>test_results <span class="op">=</span> []</span>
@@ -724,7 +724,7 @@ Figure&nbsp;3: Test set performance comparison across models
 <section id="complete-end-to-end-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="complete-end-to-end-workflow">Complete End-to-End Workflow</h2>
 <p>Here’s a complete workflow combining all three functions on a fresh dataset:</p>
-<div id="09b9ecb3" class="cell" data-execution_count="11">
+<div id="1eeaa432" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a subset of features for faster demonstration</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> load_iris</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
