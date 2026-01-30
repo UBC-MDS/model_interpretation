@@ -49,5 +49,5 @@ jobs:
       # Run pytest
       - name: Run tests with pytest
         run: |
-          pytest tests/ -v --cov=pyos_wnsong --cov-report=xml --cov-report=term
+          pytest tests/ -v --cov=model_auto_interpret --cov-report=xml --cov-report=term
 

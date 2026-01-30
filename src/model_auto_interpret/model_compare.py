@@ -32,6 +32,35 @@ def model_cv_metric_compare(models_dict, X, y, cv=5):
     -------
     dataframe : pandas.DataFrame
         Dataframe containing model name and mean evaluation metrics.
+
+    Examples
+    --------
+    >>> from sklearn.svm import SVC
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> from sklearn.datasets import load_iris
+    >>> import pandas as pd
+    >>> 
+    >>> X, y = load_iris(return_X_y=True)
+    >>> X = pd.DataFrame(X)
+    >>> y = pd.Series(y)
+    >>> 
+    >>> models = {
+    ...     'SVC': SVC(),
+    ...     'RandomForest': RandomForestClassifier(random_state=42)
+    ... }
+    >>> 
+    >>> results = model_cv_metric_compare(models, X, y, cv=5)
+    >>> print(results)
+                      accuracy  precision  recall      f1  roc_auc
+    Model                                                          
+    SVC                  0.98       0.98    0.98    0.98     0.99
+    RandomForest         0.96       0.96    0.96    0.96     0.98
+    
+    Notes
+    -----
+    - All models must implement scikit-learn's estimator interface
+    - For ROC-AUC, models must support the predict_proba() method
+    - Uses stratified K-fold cross-validation
     """
     # Input Validation Steps    
     # Check if models_dict is a dictionary and not empty

@@ -1,14 +1,6 @@
 # Interpretation of Machine Learning Models
 
-[![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Package Version](https://img.shields.io/badge/version-0.0.4-green.svg)](https://github.com/UBC-MDS/model_interpretation)
-[![Build Status](https://github.com/UBC-MDS/model_interpretation/actions/workflows/build.yml/badge.svg)](https://github.com/UBC-MDS/model_interpretation/actions)
-
-
-## Contributors
-
-Daisy (Ying) Zhou, William Song, Yasaman Baher
+[![Python Version](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Package Version](https://img.shields.io/badge/version-0.0.4-green.svg)](https://github.com/UBC-MDS/model_interpretation) [![Build Status](https://github.com/UBC-MDS/model_interpretation/actions/workflows/build.yml/badge.svg)](https://github.com/UBC-MDS/model_interpretation/actions)
 
 ## Project Description
 
@@ -16,9 +8,38 @@ Creating machine learning models often involves writing redundant code, particul
 
 ## List of Functions
 
--   `param_tuning_summary` <br> Creates a summary of the hyperparameter tuning results and extract the best estimator. <br>
--   `model_cv_metric_compare` <br> Creates a dataframe of cross-validation metric results between models for comparisons. <br>
--   `model_evaluation_plotting` <br> Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. <br>
+-   `param_tuning_summary` <br>
+
+    **Purpose:**<br>\
+    Summarizes the results of a hyperparameter search and gets the best-performing model.<br>
+
+    **Detailed explanation:**<br>\
+    This function takes a fitted `GridSearchCV` or `RandomizedSearchCV` object and converts the cross-validation results into a readable dataframe. It shows how different hyperparameter combinations performed when tuning and returns the estimator that had the best cross-validation score. This allows users to inspect tuning results and proceed with the best model without manually accessing `cv_results_` or `best_estimator_`.<br>
+
+    **Typical use case:**<br>\
+    Use this function after hyperparameter tuning to review model performance across parameter combinations and get the best model for evaluation or deployment<br>
+
+-   `model_cv_metric_compare` <br>
+
+    **Purpose:**<br>\
+    Compares multiple machine learning models using cross-validation metrics.<br>
+
+    **Detailed explanation:**<br>\
+    This function takes a dictionary of models that have not been trained and evaluates each one using cross-validation on the same dataset. It computes performance metrics across models and returns a dataframe summarizing their average cross-validation performance. This helps users compare different performance under the same setup before selecting a final model.<br>
+
+    **Typical use case:**<br>\
+    Use this function when deciding which model (e.g., logistic regression vs. random forest vs. SVM) performs best for a given classification task.<br>
+
+-   `model_evaluation_plotting` <br>
+
+    **Purpose:**<br>\
+    Evaluates a trained classification model on test data and visualizes its performance.<br>
+
+    **Detailed explanation:**<br>\
+    This function computes the standard classification metrics on test data, creates a confusion matrix in tabular form, and creates a confusion matrix visualization object. It gives both numerical and visual insights into model performance, making it easier to diagnose misclassifications and class-specific errors.<br>
+
+    **Typical use case:**<br>\
+    Use this function after training and selecting a final model to assess the performance of a model and visualize its prediction errors.<br>
 
 ## Positioning in the Python Ecosystem
 
@@ -26,50 +47,122 @@ This package is designed to effectively sit within the existing Python machine l
 
 ## Installation
 
-#### Install From PyPI:
+### Prerequisites
 
-``` base
-pip install model-auto-interpret
+-   Python 3.10 or higher
+-   pip package manager
+-   (Optional) conda for environment management
+
+### Option 1: Install from PyPI (Recommended for Users)
+
+Install the latest stable version:
+
+``` bash
+pip install -i https://test.pypi.org/simple/model-auto-interpret
 ```
 
-#### Development Installation:
+### Option 2: Install from Source (For Development)
 
-``` base
-git clone https://github.com/UBC-MDS/model_interpretation.git
-cd model_interpretation
-pip install -e .
-```
-
-#### To Include Dependencies:
-
-``` base
-pip install -e ".[tests]"
-```
-
-## Reproducibility
-
-This project is fully reproducible given the steps below. All experiments can be rerun end-to-end.
-
-## Run from Source (Development)
+For contributors or those who want the latest development version:
 
 ``` bash
 # 1. Clone the repository
 git clone https://github.com/UBC-MDS/model_interpretation.git
 cd model_interpretation
 
-# 2. Create and activate environment
+# 2. Create and activate a conda environment (recommended)
 conda env create -f environment.yml
 conda activate model_interp
 
-# 3. Install the package
-# Exclude tests if not needed
-pip install -e .
-# Include tests if needed
-pip install -e ".[tests]"
+# Alternative: Use venv instead of conda
+# python -m venv venv
+# source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# 4. Run tests
+# 3. Install the package in editable mode
+pip install -e .
+
+# 4. (Optional) Install development dependencies
+pip install -e ".[dev]"      # For linting and formatting
+pip install -e ".[tests]"    # For running tests  
+pip install -e ".[docs]"     # For building documentation
+
+# 5. Run tests to verify installation
 pytest
 ```
+
+## Quick Start
+
+Here's a complete example showing all three main functions:
+
+``` python
+from model_auto_interpret import (
+    param_tuning_summary,
+    model_cv_metric_compare,
+    model_evaluation_plotting
+)
+from sklearn.datasets import load_iris
+from sklearn.model_selection import GridSearchCV, train_test_split
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+import pandas as pd
+
+# Load and prepare data
+X, y = load_iris(return_X_y=True)
+X = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+y = pd.Series(y)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Example 1: Hyperparameter Tuning Summary
+param_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}
+grid_search = GridSearchCV(SVC(), param_grid, cv=5)
+grid_search.fit(X_train, y_train)
+
+summary_df, best_model = param_tuning_summary(grid_search)
+print("Best Parameters:")
+print(summary_df)
+
+# Example 2: Compare Multiple Models  
+models = {
+    'SVC': SVC(),
+    'RandomForest': RandomForestClassifier(),
+    'LogisticRegression': LogisticRegression(max_iter=1000)
+}
+
+comparison_df = model_cv_metric_compare(models, X_train, y_train, cv=5)
+print("\nModel Comparison:")
+print(comparison_df)
+
+# Example 3: Evaluate and Visualize
+metrics, cm_table, cm_display = model_evaluation_plotting(
+    best_model,
+    X_test,
+    y_test,
+    display_labels=['setosa', 'versicolor', 'virginica']
+)
+
+print("\nEvaluation Metrics:")
+print(metrics)
+
+# Display confusion matrix
+cm_display.plot()
+plt.show()
+```
+
+**For more detailed examples and tutorials, visit our [documentation website](https://machine-learning-model-interpretation.netlify.app/).**
+
+### Verify Installation
+
+After installation, verify everything works:
+
+``` python
+import model_auto_interpret
+print(f"Version: {model_auto_interpret.__version__}")
+```
+
+Expected output: `Version: 0.1.2` (or current version)
 
 ## Running the test suite
 
@@ -103,6 +196,10 @@ To update dependencies:
 ``` bash
 conda env update -f environment.yml --prune
 ```
+
+## Contributors
+
+Daisy (Ying) Zhou, William Song, Yasaman Baher
 
 ## License
 

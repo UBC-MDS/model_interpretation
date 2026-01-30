@@ -3,14 +3,19 @@ project:
 
 # Top navigation bar
 website:
+  title: "model_auto_interpret"
+  description: "Machine Learning Model Interpretation and Hyperparameter Tuning"
   navbar:
-    background: primary
-    search: true
     left:
       - text: "Home"
-        href: index.qmd
-      - text: "Reference"
-        href: reference/index.qmd
+        file: index.qmd        
+      - text: "Tutorial"
+        file: tutorial.qmd      
+      - text: "API Reference"
+        file: reference/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/UBC-MDS/model_interpretation
 
 # tell quarto to read the generated sidebar
 metadata-files:

@@ -1,0 +1,70 @@
+[build]
+  # Command to build your documentation with Quarto CLI installation
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
+  
+  # Directory containing the built documentation
+  publish = "_site"
+
+[build.environment]
+  # Specify Python version
+  PYTHON_VERSION = "3.11"
+
+# Configuration for deploy previews (PR previews)
+[context.deploy-preview]
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
+
+# Configuration for branch deploys
+[context.branch-deploy]
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
+
+# Configuration for production (main branch)
+[context.production]
+  command = """
+    curl -L -o /tmp/quarto.tgz https://github.com/quarto-dev/quarto-cli/releases/download/v1.4.554/quarto-1.4.554-linux-amd64.tar.gz && \
+    mkdir -p $HOME/quarto && \
+    tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
+    export PATH="$HOME/quarto/bin:$PATH" && \
+    quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
+    pip install -e .[docs] && \
+    quartodoc build && \
+    quarto render
+  """
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+

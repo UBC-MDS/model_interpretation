@@ -1,15 +1,24 @@
+name: Build and Deploy Documentation
+
 on:
   workflow_dispatch:
   push:
-    branches: main
-
-name: Render and Publish docs
+    branches: 
+      - main
+    paths:
+      - '**.qmd'
+      - '**.md'
+      - 'src/**'
+      - 'pyproject.toml'
+      - '_quarto.yml'
 
 jobs:
   render-docs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write  
+      issues: write
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -17,24 +26,22 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      # Set up Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.11'
 
-      # Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install jupyter nbformat nbclient ipykernel
           pip install -e .[docs]
+          pip install quartodoc
     
-      # manually call quartodoc build
-      - name: quartodoc build
-        run: |
-          quartodoc build
+      - name: Build docs with quartodoc
+        run: quartodoc build
 
-      - name: Render and Publish
+      - name: Render and Publish to gh-pages
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
