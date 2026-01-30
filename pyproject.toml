@@ -46,7 +46,7 @@ dependencies = [
 Homepage = "https://github.com/UBC-MDS/model_interpretation"
 "Source Code" = "https://github.com/UBC-MDS/model_interpretation"
 "Bug Tracker" = "https://github.com/UBC-MDS/model_interpretation/issues"
-Documentation = "https://github.com/UBC-MDS/model_interpretation/blob/main/README.md"
+Documentation = "https://machine-learning-model-interpretation.netlify.app/"  
 Download = "https://pypi.org/project/model_auto_interpret/#files"
 
 [project.optional-dependencies]

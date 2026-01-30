@@ -151,7 +151,7 @@ cm_display.plot()
 plt.show()
 ```
 
-**For more detailed examples and tutorials, visit our [documentation website](https://ubc-mds.github.io/model_interpretation/).**
+**For more detailed examples and tutorials, visit our [documentation website](https://machine-learning-model-interpretation.netlify.app/).**
 
 ### Verify Installation
 
