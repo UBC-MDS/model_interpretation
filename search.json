@@ -67,9 +67,9 @@
     "href": "reference/model_evaluation.model_evaluation_plotting.html",
     "title": "model_evaluation.model_evaluation_plotting",
     "section": "",
-    "text": "model_evaluation.model_evaluation_plotting(pipeline, X_test, y_test)\nCompute standard classification metrics and confusion matrix artifacts.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "text": "model_evaluation.model_evaluation_plotting(\n    pipeline,\n    X_test,\n    y_test,\n    display_labels=None,\n)\nCompute classification metrics and generate confusion matrix visualizations.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score() methods.\nrequired\n\n\nX_test\npandas.DataFrame\nTest feature matrix. Must not contain NaN values.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTrue labels for test data. Can be pandas Series, numpy array, or list. Must not contain NaN values.\nrequired\n\n\ndisplay_labels\narray-like of shape (n_classes,)\nTarget class labels for confusion matrix display. If None, uses numeric labels.\nNone\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\nmetrics\ndict\nDictionary containing: - ‘accuracy’ : float - Classification accuracy on test data - ‘f2’ : float - F2 score (beta=2) - ‘y_pred’ : numpy.ndarray - Predicted labels\n\n\ncm_table\npandas.DataFrame\nConfusion matrix as a crosstab (rows=true labels, columns=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object for visualization.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nTypeError\nIf pipeline is not fitted, or if input types are invalid.\n\n\n\nValueError\nIf X_test and y_test have different lengths, or contain NaN values.\n\n\n\n\n\n\n&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; from sklearn.model_selection import train_test_split\n&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; import pandas as pd\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; X = pd.DataFrame(X)\n&gt;&gt;&gt; y = pd.Series(y)\n&gt;&gt;&gt; X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n&gt;&gt;&gt; \n&gt;&gt;&gt; model = SVC().fit(X_train, y_train)\n&gt;&gt;&gt; metrics, cm_table, cm_display = model_evaluation_plotting(\n...     model, X_test, y_test, \n...     display_labels=['setosa', 'versicolor', 'virginica']\n... )\n&gt;&gt;&gt; \n&gt;&gt;&gt; print(metrics['accuracy'])\n0.9667\n&gt;&gt;&gt; print(cm_table)\nPredicted    0   1   2\nActual               \n0           10   0   0\n1            0   9   1\n2            0   0  10\n&gt;&gt;&gt; cm_display.plot()  # Shows confusion matrix visualization\n\n\n\n\nThe model must be fitted before calling this function\nF2 score emphasizes recall over precision (beta=2)\nFor binary classification, uses pos_label=“Y”",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_evaluation.model_evaluation_plotting"
     ]
@@ -79,9 +79,9 @@
     "href": "reference/model_evaluation.model_evaluation_plotting.html#parameters",
     "title": "model_evaluation.model_evaluation_plotting",
     "section": "",
-    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score().\nrequired\n\n\nX_test\npandas.DataFrame\nTest features. Must not contain NaNs.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTest labels (pandas Series, numpy array, or list). Must not contain NaNs.\nrequired",
+    "text": "Name\nType\nDescription\nDefault\n\n\n\n\npipeline\nsklearn estimator or sklearn.pipeline.Pipeline\nFitted model object that implements .predict() and .score() methods.\nrequired\n\n\nX_test\npandas.DataFrame\nTest feature matrix. Must not contain NaN values.\nrequired\n\n\ny_test\narray-like of shape (n_samples,)\nTrue labels for test data. Can be pandas Series, numpy array, or list. Must not contain NaN values.\nrequired\n\n\ndisplay_labels\narray-like of shape (n_classes,)\nTarget class labels for confusion matrix display. If None, uses numeric labels.\nNone",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_evaluation.model_evaluation_plotting"
     ]
@@ -91,9 +91,9 @@
     "href": "reference/model_evaluation.model_evaluation_plotting.html#returns",
     "title": "model_evaluation.model_evaluation_plotting",
     "section": "",
-    "text": "Name\nType\nDescription\n\n\n\n\naccuracy\nfloat\nClassification accuracy on the test data.\n\n\nf2\nfloat\nF2 score (beta=2) using positive label “Y”.\n\n\ny_pred\nnumpy.ndarray\nPredicted labels for the test data.\n\n\ncm_table\npandas.DataFrame\nConfusion matrix table (rows=true labels, cols=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object.",
+    "text": "Name\nType\nDescription\n\n\n\n\nmetrics\ndict\nDictionary containing: - ‘accuracy’ : float - Classification accuracy on test data - ‘f2’ : float - F2 score (beta=2) - ‘y_pred’ : numpy.ndarray - Predicted labels\n\n\ncm_table\npandas.DataFrame\nConfusion matrix as a crosstab (rows=true labels, columns=predicted labels).\n\n\ncm_display\nsklearn.metrics.ConfusionMatrixDisplay\nConfusion matrix display object for visualization.",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_evaluation.model_evaluation_plotting"
     ]
@@ -103,9 +103,33 @@
     "href": "reference/model_evaluation.model_evaluation_plotting.html#raises",
     "title": "model_evaluation.model_evaluation_plotting",
     "section": "",
-    "text": "Name\nType\nDescription\n\n\n\n\n\nTypeError\nIf inputs have invalid types, or if pipeline is not fitted.\n\n\n\nValueError\nIf X_test and y_test lengths differ, or if X_test/y_test contain NaNs.",
+    "text": "Name\nType\nDescription\n\n\n\n\n\nTypeError\nIf pipeline is not fitted, or if input types are invalid.\n\n\n\nValueError\nIf X_test and y_test have different lengths, or contain NaN values.",
     "crumbs": [
-      "Reference",
+      "API Reference",
+      "Model Interpretation Methods",
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html#examples",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html#examples",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; from sklearn.model_selection import train_test_split\n&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; import pandas as pd\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; X = pd.DataFrame(X)\n&gt;&gt;&gt; y = pd.Series(y)\n&gt;&gt;&gt; X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\n&gt;&gt;&gt; \n&gt;&gt;&gt; model = SVC().fit(X_train, y_train)\n&gt;&gt;&gt; metrics, cm_table, cm_display = model_evaluation_plotting(\n...     model, X_test, y_test, \n...     display_labels=['setosa', 'versicolor', 'virginica']\n... )\n&gt;&gt;&gt; \n&gt;&gt;&gt; print(metrics['accuracy'])\n0.9667\n&gt;&gt;&gt; print(cm_table)\nPredicted    0   1   2\nActual               \n0           10   0   0\n1            0   9   1\n2            0   0  10\n&gt;&gt;&gt; cm_display.plot()  # Shows confusion matrix visualization",
+    "crumbs": [
+      "API Reference",
+      "Model Interpretation Methods",
+      "model_evaluation.model_evaluation_plotting"
+    ]
+  },
+  {
+    "objectID": "reference/model_evaluation.model_evaluation_plotting.html#notes",
+    "href": "reference/model_evaluation.model_evaluation_plotting.html#notes",
+    "title": "model_evaluation.model_evaluation_plotting",
+    "section": "",
+    "text": "The model must be fitted before calling this function\nF2 score emphasizes recall over precision (beta=2)\nFor binary classification, uses pos_label=“Y”",
+    "crumbs": [
+      "API Reference",
       "Model Interpretation Methods",
       "model_evaluation.model_evaluation_plotting"
     ]
@@ -115,9 +139,9 @@
     "href": "reference/index.html",
     "title": "Function reference",
     "section": "",
-    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute classification metrics and generate confusion matrix visualizations.",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Function reference"
     ]
   },
@@ -126,9 +150,9 @@
     "href": "reference/index.html#model-interpretation-methods",
     "title": "Function reference",
     "section": "",
-    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute standard classification metrics and confusion matrix artifacts.",
+    "text": "Functions to help interpret machine learning models.\n\n\n\nhyperparameter_tuning_summary.param_tuning_summary\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\nmodel_compare.model_cv_metric_compare\nEvaluates multiple binary classification models using cross-validation\n\n\nmodel_evaluation.model_evaluation_plotting\nCompute classification metrics and generate confusion matrix visualizations.",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Function reference"
     ]
   },
@@ -137,14 +161,7 @@
     "href": "index.html",
     "title": "Interpretation of Machine Learning Models",
     "section": "",
-    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher\n\n\n\nCreating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow.\n\n\n\n\nparam_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization. \n\n\n\n\nThis package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.\n\n\n\n\n\npip install model-auto-interpret\n\n\n\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\npip install -e .\n\n\n\npip install -e \".[tests]\"\n\n\n\n\nThis project is fully reproducible given the steps below. All experiments can be rerun end-to-end.\n\n\n\n# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interp\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\npytest\n\n\n\nTests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory.\n\n\n\nname: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune\n\n\n\nThe software code contained within this repository is licensed under the MIT license. See the license file for more information."
-  },
-  {
-    "objectID": "index.html#contributors",
-    "href": "index.html#contributors",
-    "title": "Interpretation of Machine Learning Models",
-    "section": "",
-    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher"
+    "text": "Creating machine learning models often involves writing redundant code, particularly when tuning hyperparameters and comparing performance across different models. This project aims to reduce that redundancy by streamlining these repetitive steps, making the model development process more efficient and time-effective. To achieve this, our project focuses on building reusable functions that, given user input, automatically return the optimal hyperparameters, the best-performing model, its accuracy score, and a corresponding confusion matrix, all in a single, unified workflow.\n\n\n\n\nparam_tuning_summary \nPurpose:\nSummarizes the results of a hyperparameter search and gets the best-performing model.\nDetailed explanation:\nThis function takes a fitted GridSearchCV or RandomizedSearchCV object and converts the cross-validation results into a readable dataframe. It shows how different hyperparameter combinations performed when tuning and returns the estimator that had the best cross-validation score. This allows users to inspect tuning results and proceed with the best model without manually accessing cv_results_ or best_estimator_.\nTypical use case:\nUse this function after hyperparameter tuning to review model performance across parameter combinations and get the best model for evaluation or deployment\nmodel_cv_metric_compare \nPurpose:\nCompares multiple machine learning models using cross-validation metrics.\nDetailed explanation:\nThis function takes a dictionary of models that have not been trained and evaluates each one using cross-validation on the same dataset. It computes performance metrics across models and returns a dataframe summarizing their average cross-validation performance. This helps users compare different performance under the same setup before selecting a final model.\nTypical use case:\nUse this function when deciding which model (e.g., logistic regression vs. random forest vs. SVM) performs best for a given classification task.\nmodel_evaluation_plotting \nPurpose:\nEvaluates a trained classification model on test data and visualizes its performance.\nDetailed explanation:\nThis function computes the standard classification metrics on test data, creates a confusion matrix in tabular form, and creates a confusion matrix visualization object. It gives both numerical and visual insights into model performance, making it easier to diagnose misclassifications and class-specific errors.\nTypical use case:\nUse this function after training and selecting a final model to assess the performance of a model and visualize its prediction errors.\n\n\n\n\nThis package is designed to effectively sit within the existing Python machine learning ecosystem, specifically the scikit-learn library for model training, hyperparameter tuning, and evaluation. While scikit-learn is a powerful library on its own, our functions aim to reduce repeated and manual comparisons between multiple models, something that scikit-learn lacks. Other packages such as mlxtend and yellowbrick offer visualization utilities for users; however, they tend to focus more on the visual aspects of models rather than providing a unified workflow. Our package targets this gap by combining hyperparameter tuning, model comparison, metric reporting, and confusion matrix generation into reusable functions, improving reproducibility and efficiency during model development.\n\n\n\n\n\n\nPython 3.10 or higher\npip package manager\n(Optional) conda for environment management\n\n\n\n\nInstall the latest stable version:\npip install -i https://test.pypi.org/simple/model-auto-interpret\n\n\n\nFor contributors or those who want the latest development version:\n# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate a conda environment (recommended)\nconda env create -f environment.yml\nconda activate model_interp\n\n# Alternative: Use venv instead of conda\n# python -m venv venv\n# source venv/bin/activate  # On Windows: venv\\Scripts\\activate\n\n# 3. Install the package in editable mode\npip install -e .\n\n# 4. (Optional) Install development dependencies\npip install -e \".[dev]\"      # For linting and formatting\npip install -e \".[tests]\"    # For running tests  \npip install -e \".[docs]\"     # For building documentation\n\n# 5. Run tests to verify installation\npytest\n\n\n\n\nHere’s a complete example showing all three main functions:\nfrom model_auto_interpret import (\n    param_tuning_summary,\n    model_cv_metric_compare,\n    model_evaluation_plotting\n)\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import GridSearchCV, train_test_split\nfrom sklearn.svm import SVC\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.linear_model import LogisticRegression\nimport pandas as pd\n\n# Load and prepare data\nX, y = load_iris(return_X_y=True)\nX = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])\ny = pd.Series(y)\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# Example 1: Hyperparameter Tuning Summary\nparam_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}\ngrid_search = GridSearchCV(SVC(), param_grid, cv=5)\ngrid_search.fit(X_train, y_train)\n\nsummary_df, best_model = param_tuning_summary(grid_search)\nprint(\"Best Parameters:\")\nprint(summary_df)\n\n# Example 2: Compare Multiple Models  \nmodels = {\n    'SVC': SVC(),\n    'RandomForest': RandomForestClassifier(),\n    'LogisticRegression': LogisticRegression(max_iter=1000)\n}\n\ncomparison_df = model_cv_metric_compare(models, X_train, y_train, cv=5)\nprint(\"\\nModel Comparison:\")\nprint(comparison_df)\n\n# Example 3: Evaluate and Visualize\nmetrics, cm_table, cm_display = model_evaluation_plotting(\n    best_model,\n    X_test,\n    y_test,\n    display_labels=['setosa', 'versicolor', 'virginica']\n)\n\nprint(\"\\nEvaluation Metrics:\")\nprint(metrics)\n\n# Display confusion matrix\ncm_display.plot()\nplt.show()\nFor more detailed examples and tutorials, visit our documentation website.\n\n\nAfter installation, verify everything works:\nimport model_auto_interpret\nprint(f\"Version: {model_auto_interpret.__version__}\")\nExpected output: Version: 0.1.2 (or current version)\n\n\n\n\nTests are run using the pytest command in the root of the project. More details about the test suite and to run tests can be found in the tests directory.\n\n\n\nname: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune\n\n\n\nDaisy (Ying) Zhou, William Song, Yasaman Baher\n\n\n\nThe software code contained within this repository is licensed under the MIT license. See the license file for more information."
   },
   {
     "objectID": "index.html#project-description",
@@ -158,7 +175,7 @@
     "href": "index.html#list-of-functions",
     "title": "Interpretation of Machine Learning Models",
     "section": "",
-    "text": "param_tuning_summary  Creates a summary of the hyperparameter tuning results and extract the best estimator. \nmodel_cv_metric_compare  Creates a dataframe of cross-validation metric results between models for comparisons. \nmodel_evaluation_plotting  Creates standard classification metrics, creates a confusion matrix as a table, and creates a confusion matrix display object for visualization."
+    "text": "param_tuning_summary \nPurpose:\nSummarizes the results of a hyperparameter search and gets the best-performing model.\nDetailed explanation:\nThis function takes a fitted GridSearchCV or RandomizedSearchCV object and converts the cross-validation results into a readable dataframe. It shows how different hyperparameter combinations performed when tuning and returns the estimator that had the best cross-validation score. This allows users to inspect tuning results and proceed with the best model without manually accessing cv_results_ or best_estimator_.\nTypical use case:\nUse this function after hyperparameter tuning to review model performance across parameter combinations and get the best model for evaluation or deployment\nmodel_cv_metric_compare \nPurpose:\nCompares multiple machine learning models using cross-validation metrics.\nDetailed explanation:\nThis function takes a dictionary of models that have not been trained and evaluates each one using cross-validation on the same dataset. It computes performance metrics across models and returns a dataframe summarizing their average cross-validation performance. This helps users compare different performance under the same setup before selecting a final model.\nTypical use case:\nUse this function when deciding which model (e.g., logistic regression vs. random forest vs. SVM) performs best for a given classification task.\nmodel_evaluation_plotting \nPurpose:\nEvaluates a trained classification model on test data and visualizes its performance.\nDetailed explanation:\nThis function computes the standard classification metrics on test data, creates a confusion matrix in tabular form, and creates a confusion matrix visualization object. It gives both numerical and visual insights into model performance, making it easier to diagnose misclassifications and class-specific errors.\nTypical use case:\nUse this function after training and selecting a final model to assess the performance of a model and visualize its prediction errors."
   },
   {
     "objectID": "index.html#positioning-in-the-python-ecosystem",
@@ -172,21 +189,14 @@
     "href": "index.html#installation",
     "title": "Interpretation of Machine Learning Models",
     "section": "",
-    "text": "pip install model-auto-interpret\n\n\n\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\npip install -e .\n\n\n\npip install -e \".[tests]\""
+    "text": "Python 3.10 or higher\npip package manager\n(Optional) conda for environment management\n\n\n\n\nInstall the latest stable version:\npip install -i https://test.pypi.org/simple/model-auto-interpret\n\n\n\nFor contributors or those who want the latest development version:\n# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate a conda environment (recommended)\nconda env create -f environment.yml\nconda activate model_interp\n\n# Alternative: Use venv instead of conda\n# python -m venv venv\n# source venv/bin/activate  # On Windows: venv\\Scripts\\activate\n\n# 3. Install the package in editable mode\npip install -e .\n\n# 4. (Optional) Install development dependencies\npip install -e \".[dev]\"      # For linting and formatting\npip install -e \".[tests]\"    # For running tests  \npip install -e \".[docs]\"     # For building documentation\n\n# 5. Run tests to verify installation\npytest"
   },
   {
-    "objectID": "index.html#reproducibility",
-    "href": "index.html#reproducibility",
+    "objectID": "index.html#quick-start",
+    "href": "index.html#quick-start",
     "title": "Interpretation of Machine Learning Models",
     "section": "",
-    "text": "This project is fully reproducible given the steps below. All experiments can be rerun end-to-end."
-  },
-  {
-    "objectID": "index.html#run-from-source-development",
-    "href": "index.html#run-from-source-development",
-    "title": "Interpretation of Machine Learning Models",
-    "section": "",
-    "text": "# 1. Clone the repository\ngit clone https://github.com/UBC-MDS/model_interpretation.git\ncd model_interpretation\n\n# 2. Create and activate environment\nconda env create -f environment.yml\nconda activate model_interp\n\n# 3. Install the package\n# Exclude tests if not needed\npip install -e .\n# Include tests if needed\npip install -e \".[tests]\"\n\n# 4. Run tests\npytest"
+    "text": "Here’s a complete example showing all three main functions:\nfrom model_auto_interpret import (\n    param_tuning_summary,\n    model_cv_metric_compare,\n    model_evaluation_plotting\n)\nfrom sklearn.datasets import load_iris\nfrom sklearn.model_selection import GridSearchCV, train_test_split\nfrom sklearn.svm import SVC\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.linear_model import LogisticRegression\nimport pandas as pd\n\n# Load and prepare data\nX, y = load_iris(return_X_y=True)\nX = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])\ny = pd.Series(y)\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# Example 1: Hyperparameter Tuning Summary\nparam_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}\ngrid_search = GridSearchCV(SVC(), param_grid, cv=5)\ngrid_search.fit(X_train, y_train)\n\nsummary_df, best_model = param_tuning_summary(grid_search)\nprint(\"Best Parameters:\")\nprint(summary_df)\n\n# Example 2: Compare Multiple Models  \nmodels = {\n    'SVC': SVC(),\n    'RandomForest': RandomForestClassifier(),\n    'LogisticRegression': LogisticRegression(max_iter=1000)\n}\n\ncomparison_df = model_cv_metric_compare(models, X_train, y_train, cv=5)\nprint(\"\\nModel Comparison:\")\nprint(comparison_df)\n\n# Example 3: Evaluate and Visualize\nmetrics, cm_table, cm_display = model_evaluation_plotting(\n    best_model,\n    X_test,\n    y_test,\n    display_labels=['setosa', 'versicolor', 'virginica']\n)\n\nprint(\"\\nEvaluation Metrics:\")\nprint(metrics)\n\n# Display confusion matrix\ncm_display.plot()\nplt.show()\nFor more detailed examples and tutorials, visit our documentation website.\n\n\nAfter installation, verify everything works:\nimport model_auto_interpret\nprint(f\"Version: {model_auto_interpret.__version__}\")\nExpected output: Version: 0.1.2 (or current version)"
   },
   {
     "objectID": "index.html#running-the-test-suite",
@@ -201,6 +211,13 @@
     "title": "Interpretation of Machine Learning Models",
     "section": "",
     "text": "name: model_interp\nchannels:\n  - conda-forge\ndependencies:\n  - python=3.11\n  - numpy=2.4.1\n  - pandas=2.3.3\n  - scikit-learn\n  - jupyterlab\n  - pytest=9.0.2          \n  - pytest-cov=7.0.0\n  - matplotlib=3.10.8\nTo recreate this environment exactly:\nconda env create -f environment.yml\nTo update dependencies:\nconda env update -f environment.yml --prune"
+  },
+  {
+    "objectID": "index.html#contributors",
+    "href": "index.html#contributors",
+    "title": "Interpretation of Machine Learning Models",
+    "section": "",
+    "text": "Daisy (Ying) Zhou, William Song, Yasaman Baher"
   },
   {
     "objectID": "index.html#license",
@@ -252,16 +269,86 @@
     "text": "First release\n\n\n\n\nFunction description/specification written without code implementation for param_tuning_summary() in hyperparameter_tuning_summary.py\nCODE_OF_CONDUCT.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_evaluation_plotting() in model_evaluation.py\nMilestone 1 README.md Descriptions.\nCONTRIBUTING.md initial content.\n\n\n\n\n\nFunction description/specification written without code implementation for model_metric_compare() in model_compare.py\nAdded the skeleton of project structure including folders and empty files.\nAdded pyproject.toml with basic package information and Hatch environment setup."
   },
   {
+    "objectID": "tutorial.html",
+    "href": "tutorial.html",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "",
+    "text": "This tutorial demonstrates all functions in the model-auto-interpret package with complete, runnable examples using real datasets."
+  },
+  {
+    "objectID": "tutorial.html#introduction",
+    "href": "tutorial.html#introduction",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "",
+    "text": "This tutorial demonstrates all functions in the model-auto-interpret package with complete, runnable examples using real datasets."
+  },
+  {
+    "objectID": "tutorial.html#setup-and-data-loading",
+    "href": "tutorial.html#setup-and-data-loading",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Setup and Data Loading",
+    "text": "Setup and Data Loading\n\n# Import all necessary libraries\nimport numpy as np\nimport pandas as pd\nimport matplotlib.pyplot as plt\nfrom sklearn.datasets import load_breast_cancer\nfrom sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV\nfrom sklearn.svm import SVC\nfrom sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.tree import DecisionTreeClassifier\nfrom scipy.stats import uniform, randint\n\n# Import our package functions\nfrom model_auto_interpret import (\n    param_tuning_summary,\n    model_cv_metric_compare,\n    model_evaluation_plotting\n)\n\n# Load the Breast Cancer dataset (binary classification)\ncancer = load_breast_cancer()\nX_data = pd.DataFrame(cancer.data, columns=cancer.feature_names)\ny_data = pd.Series(cancer.target)\n\n# Convert to \"Y\"/\"N\" labels as required by the package\ny_data = y_data.map({1: 'Y', 0: 'N'})\n\n# Split into train/test\nX_train, X_test, y_train, y_test = train_test_split(\n    X_data, y_data, test_size=0.2, random_state=42\n)\n\nprint(f\"Dataset shape: {X_train.shape}\")\nprint(f\"Classes: {np.unique(y_data)}\")\nprint(f\"Class distribution:\\n{y_train.value_counts()}\")\n\nDataset shape: (455, 30)\nClasses: ['N' 'Y']\nClass distribution:\nY    286\nN    169\nName: count, dtype: int64"
+  },
+  {
+    "objectID": "tutorial.html#function-1-param_tuning_summary",
+    "href": "tutorial.html#function-1-param_tuning_summary",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Function 1: param_tuning_summary()",
+    "text": "Function 1: param_tuning_summary()\n\nPurpose\nThis function helps you extract and summarize the results from scikit-learn’s GridSearchCV or RandomizedSearchCV, making it easy to see which hyperparameters performed best.\n\n\nExample 1.1: GridSearchCV with SVC\n\n# Define parameter grid to search\nparam_grid = {\n    'C': [0.1, 1, 10, 100],\n    'kernel': ['rbf', 'linear'],\n    'gamma': ['scale', 'auto']\n}\n\n# Create and fit GridSearchCV\ngrid_search = GridSearchCV(\n    SVC(random_state=42),\n    param_grid,\n    cv=5,\n    scoring='accuracy',\n    verbose=0\n)\n\nprint(\"Performing grid search...\")\ngrid_search.fit(X_train, y_train)\n\n# Use our function to get a summary\nsummary_df, best_estimator = param_tuning_summary(grid_search)\n\nprint(\"\\n=== Best Hyperparameters Summary ===\")\nprint(summary_df)\nprint(f\"\\nBest Model: {best_estimator}\")\nprint(f\"Best Cross-Validation Score: {summary_df['Best_Score'].iloc[0]:.4f}\")\n\nPerforming grid search...\n\n=== Best Hyperparameters Summary ===\n  Parameter   Value  Best_Score\n0         C     100    0.971429\n1     gamma   scale    0.971429\n2    kernel  linear    0.971429\n\nBest Model: SVC(C=100, kernel='linear', random_state=42)\nBest Cross-Validation Score: 0.9714\n\n\n\n\nExample 1.2: RandomizedSearchCV with Random Forest\n\n# Define parameter distributions for randomized search\nparam_distributions = {\n    'n_estimators': randint(50, 200),\n    'max_depth': randint(3, 20),\n    'min_samples_split': randint(2, 15),\n    'min_samples_leaf': randint(1, 10)\n}\n\n# Create and fit RandomizedSearchCV\nrandom_search = RandomizedSearchCV(\n    RandomForestClassifier(random_state=42),\n    param_distributions,\n    n_iter=20,  # Number of parameter settings to sample\n    cv=5,\n    scoring='accuracy',\n    random_state=42,\n    verbose=0\n)\n\nprint(\"\\nPerforming randomized search...\")\nrandom_search.fit(X_train, y_train)\n\n# Get summary\nrf_summary, rf_best_model = param_tuning_summary(random_search)\n\nprint(\"\\n=== Random Forest Best Parameters ===\")\nprint(rf_summary)\n\n\nPerforming randomized search...\n\n=== Random Forest Best Parameters ===\n           Parameter  Value  Best_Score\n0          max_depth     18    0.956044\n1   min_samples_leaf      2    0.956044\n2  min_samples_split      6    0.956044\n3       n_estimators     73    0.956044\n\n\n\n\nKey Outputs\n\nsummary_df: DataFrame with parameter names, values, and best score\nbest_estimator: The fitted model with optimal parameters"
+  },
+  {
+    "objectID": "tutorial.html#function-2-model_cv_metric_compare",
+    "href": "tutorial.html#function-2-model_cv_metric_compare",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Function 2: model_cv_metric_compare()",
+    "text": "Function 2: model_cv_metric_compare()\n\nPurpose\nCompare multiple models using cross-validation to find which performs best on your dataset.\n\n\nExample 2.1: Basic Model Comparison\n\n# Define multiple models to compare\nmodels = {\n    'Logistic Regression': LogisticRegression(max_iter=1000, random_state=42),\n    'SVC (RBF)': SVC(kernel='rbf', random_state=42, probability=True),\n    'SVC (Linear)': SVC(kernel='linear', random_state=42, probability=True),\n    'Random Forest': RandomForestClassifier(n_estimators=100, random_state=42),\n    'Decision Tree': DecisionTreeClassifier(random_state=42),\n    'Gradient Boosting': GradientBoostingClassifier(random_state=42)\n}\n\n# Compare all models using cross-validation\nprint(\"\\nComparing models with 5-fold cross-validation...\")\ncomparison_df = model_cv_metric_compare(models, X_train, y_train, cv=5)\n\nprint(\"\\n=== Model Comparison Results ===\")\nprint(comparison_df.sort_values('accuracy', ascending=False))\n\n\nComparing models with 5-fold cross-validation...\n\n\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n\n\n\n=== Model Comparison Results ===\n                     accuracy  precision    recall        f1   roc_auc\nModel                                                                 \nRandom Forest        0.958242   0.959423  0.975439  0.967129  0.987812\nSVC (Linear)         0.956044   0.956076  0.975620  0.965453  0.990071\nGradient Boosting    0.951648   0.955864  0.968482  0.961942  0.989087\nLogistic Regression  0.947253   0.949560  0.968603  0.958489  0.989675\nDecision Tree        0.916484   0.942272  0.926618  0.933165  0.913131\nSVC (RBF)            0.903297   0.882681  0.979008  0.927768  0.968612\n\n\n\n\nExample 2.2: Visualizing Comparison Results\n\n# Create a visualization of model performance\nfig, ax = plt.subplots(figsize=(12, 6))\n\n# Sort by accuracy\ncomparison_sorted = comparison_df.sort_values('accuracy', ascending=True)\n\n# Create horizontal bar plot\ny_pos = np.arange(len(comparison_sorted))\nax.barh(y_pos, comparison_sorted['accuracy'],\n        align='center', alpha=0.7, color='skyblue', edgecolor='navy')\n\n# Customize plot\nax.set_yticks(y_pos)\nax.set_yticklabels(comparison_sorted.index)\nax.set_xlabel('Cross-Validation Accuracy', fontsize=12)\nax.set_title('Model Performance Comparison on Breast Cancer Dataset', fontsize=14, fontweight='bold')\nax.grid(axis='x', alpha=0.3)\n\n# Add value labels\nfor i, score in enumerate(comparison_sorted['accuracy']):\n    ax.text(score, i, f' {score:.3f}', \n            va='center', fontsize=9)\n\nplt.tight_layout()\nplt.show()\n\nprint(f\"\\nBest Model: {comparison_df['accuracy'].idxmax()}\")\nprint(f\"Best Accuracy: {comparison_df['accuracy'].max():.4f}\")\n\n\n\n\n\n\n\nFigure 1: Model performance comparison on breast cancer dataset\n\n\n\n\n\n\nBest Model: Random Forest\nBest Accuracy: 0.9582\n\n\n\n\nExample 2.3: Examining All Metrics\n\n# Display all metrics for better comparison\nprint(\"\\n=== Detailed Metrics for All Models ===\")\nprint(comparison_df.round(4))\n\n# Compare specific metrics\nprint(\"\\n=== F1 Scores ===\")\nprint(comparison_df[['f1']].sort_values('f1', ascending=False))\n\n\n=== Detailed Metrics for All Models ===\n                     accuracy  precision  recall      f1  roc_auc\nModel                                                            \nLogistic Regression    0.9473     0.9496  0.9686  0.9585   0.9897\nSVC (RBF)              0.9033     0.8827  0.9790  0.9278   0.9686\nSVC (Linear)           0.9560     0.9561  0.9756  0.9655   0.9901\nRandom Forest          0.9582     0.9594  0.9754  0.9671   0.9878\nDecision Tree          0.9165     0.9423  0.9266  0.9332   0.9131\nGradient Boosting      0.9516     0.9559  0.9685  0.9619   0.9891\n\n=== F1 Scores ===\n                           f1\nModel                        \nRandom Forest        0.967129\nSVC (Linear)         0.965453\nGradient Boosting    0.961942\nLogistic Regression  0.958489\nDecision Tree        0.933165\nSVC (RBF)            0.927768"
+  },
+  {
+    "objectID": "tutorial.html#function-3-model_evaluation_plotting",
+    "href": "tutorial.html#function-3-model_evaluation_plotting",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Function 3: model_evaluation_plotting()",
+    "text": "Function 3: model_evaluation_plotting()\n\nPurpose\nEvaluate a fitted model on test data and generate comprehensive metrics plus confusion matrix visualizations.\n\n\nExample 3.1: Evaluate Best Model\n\n# Use the best estimator from grid search\nbest_model = best_estimator\n\n# Evaluate on test set\naccuracy, f2, y_pred, cm_table, cm_display = model_evaluation_plotting(\n    best_model,\n    X_test,\n    y_test\n)\n\nprint(\"\\n=== Evaluation Results ===\")\nprint(f\"Accuracy: {accuracy:.4f}\")\nprint(f\"F2 Score: {f2:.4f}\")\n\nprint(\"\\n=== Confusion Matrix Table ===\")\nprint(cm_table)\n\nprint(f\"\\n=== Number of Predictions ===\")\nprint(f\"Total predictions: {len(y_pred)}\")\nprint(f\"Predictions distribution:\\n{pd.Series(y_pred).value_counts()}\")\n\n\n=== Evaluation Results ===\nAccuracy: 0.9561\nF2 Score: 0.9777\n\n=== Confusion Matrix Table ===\ncol_0   N   Y\nrow_0        \nN      39   4\nY       1  70\n\n=== Number of Predictions ===\nTotal predictions: 114\nPredictions distribution:\nY    74\nN    40\nName: count, dtype: int64\n\n\n\n\n\n\n\n\n\n\n\nExample 3.2: Visualize Confusion Matrix\n\n# Display the confusion matrix\ncm_display.plot(cmap='Blues')\nplt.title('Confusion Matrix - SVC on Breast Cancer Dataset', fontsize=14, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\nFigure 2: Confusion matrix for breast cancer classification\n\n\n\n\n\n\n\nExample 3.3: Compare Multiple Models on Test Set\n\n# Evaluate all models on test set\nprint(\"\\n=== Test Set Performance Comparison ===\")\ntest_results = []\n\nfor model_name, model in models.items():\n    # Fit model\n    model.fit(X_train, y_train)\n    \n    # Evaluate\n    acc, f2_score, preds, _, _ = model_evaluation_plotting(model, X_test, y_test)\n    \n    test_results.append({\n        'Model': model_name,\n        'Test Accuracy': acc,\n        'Test F2 Score': f2_score\n    })\n\ntest_df = pd.DataFrame(test_results).set_index('Model')\ntest_df = test_df.sort_values('Test Accuracy', ascending=False)\nprint(test_df.round(4))\n\n\n=== Test Set Performance Comparison ===\n\n\n/opt/hostedtoolcache/Python/3.11.14/x64/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py:406: ConvergenceWarning: lbfgs failed to converge after 1000 iteration(s) (status=1):\nSTOP: TOTAL NO. OF ITERATIONS REACHED LIMIT\n\nIncrease the number of iterations to improve the convergence (max_iter=1000).\nYou might also want to scale the data as shown in:\n    https://scikit-learn.org/stable/modules/preprocessing.html\nPlease also refer to the documentation for alternative solver options:\n    https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression\n  n_iter_i = _check_optimize_result(\n\n\n                     Test Accuracy  Test F2 Score\nModel                                            \nRandom Forest               0.9649         0.9804\nLogistic Regression         0.9561         0.9777\nGradient Boosting           0.9561         0.9691\nSVC (Linear)                0.9561         0.9777\nSVC (RBF)                   0.9474         0.9834\nDecision Tree               0.9474         0.9577\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExample 3.4: Visualize Test Set Comparison\n\n# Create comparison visualization\nfig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))\n\n# Accuracy comparison\ntest_df_sorted = test_df.sort_values('Test Accuracy', ascending=True)\ny_pos = np.arange(len(test_df_sorted))\n\nax1.barh(y_pos, test_df_sorted['Test Accuracy'], color='steelblue', alpha=0.7)\nax1.set_yticks(y_pos)\nax1.set_yticklabels(test_df_sorted.index)\nax1.set_xlabel('Test Accuracy', fontsize=11)\nax1.set_title('Test Accuracy by Model', fontsize=12, fontweight='bold')\nax1.grid(axis='x', alpha=0.3)\n\n# F2 Score comparison\ntest_df_f2_sorted = test_df.sort_values('Test F2 Score', ascending=True)\ny_pos2 = np.arange(len(test_df_f2_sorted))\n\nax2.barh(y_pos2, test_df_f2_sorted['Test F2 Score'], color='coral', alpha=0.7)\nax2.set_yticks(y_pos2)\nax2.set_yticklabels(test_df_f2_sorted.index)\nax2.set_xlabel('Test F2 Score', fontsize=11)\nax2.set_title('Test F2 Score by Model', fontsize=12, fontweight='bold')\nax2.grid(axis='x', alpha=0.3)\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\nFigure 3: Test set performance comparison across models"
+  },
+  {
+    "objectID": "tutorial.html#complete-end-to-end-workflow",
+    "href": "tutorial.html#complete-end-to-end-workflow",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Complete End-to-End Workflow",
+    "text": "Complete End-to-End Workflow\nHere’s a complete workflow combining all three functions on a fresh dataset:\n\n# Use a subset of features for faster demonstration\nfrom sklearn.datasets import load_iris\n\n# Load Iris dataset\niris = load_iris()\nX_iris = pd.DataFrame(iris.data, columns=iris.feature_names)\ny_iris = pd.Series(iris.target)\n\n# Convert to binary classification: setosa (0) vs others (1,2)\ny_iris_binary = (y_iris != 0).astype(int).map({0: 'N', 1: 'Y'})\n\nX_train_i, X_test_i, y_train_i, y_test_i = train_test_split(\n    X_iris, y_iris_binary, test_size=0.2, random_state=42\n)\n\nprint(\"=== STEP 1: Compare Multiple Models ===\")\niris_models = {\n    'Logistic Regression': LogisticRegression(max_iter=1000),\n    'SVC': SVC(probability=True),\n    'Random Forest': RandomForestClassifier(random_state=42),\n    'Decision Tree': DecisionTreeClassifier(random_state=42)\n}\n\niris_comparison = model_cv_metric_compare(iris_models, X_train_i, y_train_i, cv=5)\nprint(iris_comparison.round(4))\n\nprint(\"\\n=== STEP 2: Tune Best Model ===\")\n# Let's tune the best performing model\nbest_model_name = iris_comparison['accuracy'].idxmax()\nprint(f\"Tuning: {best_model_name}\")\n\n# Tune SVC\nsvc_param_grid = {\n    'C': [0.1, 1, 10],\n    'kernel': ['rbf', 'linear'],\n    'gamma': ['scale', 'auto']\n}\n\nsvc_grid = GridSearchCV(SVC(probability=True), svc_param_grid, cv=5, scoring='accuracy')\nsvc_grid.fit(X_train_i, y_train_i)\n\ntuning_summary, best_svc = param_tuning_summary(svc_grid)\nprint(\"\\nTuning Results:\")\nprint(tuning_summary)\n\nprint(\"\\n=== STEP 3: Final Evaluation ===\")\nfinal_acc, final_f2, final_pred, final_cm, final_display = model_evaluation_plotting(\n    best_svc,\n    X_test_i,\n    y_test_i\n)\n\nprint(f\"Final Test Accuracy: {final_acc:.4f}\")\nprint(f\"Final Test F2 Score: {final_f2:.4f}\")\nprint(f\"\\nConfusion Matrix:\")\nprint(final_cm)\n\n=== STEP 1: Compare Multiple Models ===\n                     accuracy  precision  recall   f1  roc_auc\nModel                                                         \nLogistic Regression       1.0        1.0     1.0  1.0      1.0\nSVC                       1.0        1.0     1.0  1.0      1.0\nRandom Forest             1.0        1.0     1.0  1.0      1.0\nDecision Tree             1.0        1.0     1.0  1.0      1.0\n\n=== STEP 2: Tune Best Model ===\nTuning: Logistic Regression\n\nTuning Results:\n  Parameter  Value  Best_Score\n0         C    0.1         1.0\n1     gamma  scale         1.0\n2    kernel    rbf         1.0\n\n=== STEP 3: Final Evaluation ===\nFinal Test Accuracy: 1.0000\nFinal Test F2 Score: 1.0000\n\nConfusion Matrix:\ncol_0   N   Y\nrow_0        \nN      10   0\nY       0  20\n\n\n\n\n\n\n\n\n\n\n# Display final confusion matrix\nfinal_display.plot(cmap='viridis')\nplt.title('Final Optimized SVC - Iris Binary Classification', fontsize=12, fontweight='bold')\nplt.tight_layout()\nplt.show()\n\nprint(\"\\n=== Workflow Complete! ===\")\n\n\n\n\n\n\n\nFigure 4: Final model confusion matrix on iris dataset\n\n\n\n\n\n\n=== Workflow Complete! ==="
+  },
+  {
+    "objectID": "tutorial.html#summary",
+    "href": "tutorial.html#summary",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Summary",
+    "text": "Summary\nYou’ve learned how to:\n\nExtract hyperparameter tuning results with param_tuning_summary()\nCompare multiple models efficiently with model_cv_metric_compare()\nEvaluate and visualize results with model_evaluation_plotting()\nCombine all functions in an end-to-end ML workflow"
+  },
+  {
+    "objectID": "tutorial.html#next-steps",
+    "href": "tutorial.html#next-steps",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Next Steps",
+    "text": "Next Steps\n\nExplore the API Reference for detailed function signatures\nCheck out the GitHub repository for source code\nReport issues or contribute via our Issue Tracker\nRead Contributing Guidelines to contribute to the project"
+  },
+  {
+    "objectID": "tutorial.html#tips-for-best-results",
+    "href": "tutorial.html#tips-for-best-results",
+    "title": "Tutorial: Complete Usage Guide",
+    "section": "Tips for Best Results",
+    "text": "Tips for Best Results\n\nAlways use pandas DataFrames for X and pandas Series for y\nEnsure models are fitted before using model_evaluation_plotting()\nThis package requires binary classification with labels “Y” and “N”\nFor models that support it, enable probability=True for SVC to compute ROC-AUC scores\nConsider computational cost when setting parameter grids for tuning"
+  },
+  {
     "objectID": "CONTRIBUTING.html",
     "href": "CONTRIBUTING.html",
-    "title": "",
+    "title": "model_auto_interpret",
     "section": "",
     "text": "Consistency in coding style is important throughout the project. We recommend following the official Python style guide (PEP 8). Key points include: - Indentation: Use consistent tabs or spaces to maintain readability. - Line Length: Keep lines reasonably short; avoid exceeding half the width of notebook cells if applicable. - Comments: Use # for comments and write them clearly to explain the code. - Whitespace: Include proper spacing around operators, function arguments, and within control structures. - Imports: Organize import statements in logical groups and in the recommended order (standard library, third-party packages, local modules). ## Pull Request Process  - It is recommended to create a Git branch for each pull request in order to maintain consistency. - Code should follow the official python style guide - We will be using Docstring for documentation. - We use pytest (assert). Contributions with test cases included will be easier to accept since we can check erros better. ## Code of Conduct  - Each contributor shall adhere to the examples set below: Use welcoming and inclusive language Be respectful of differing opinions and viewpoints Be cognizant of intention when proivding constructive criticism Recognize the best in others Show empathy towards community members Each contributor should avoid behaviours such as:\n\nSexualized language and unwanted sexual attention/advances Trolling, insults, derogatory comments, and political attacks Public or private harassment Ignoring privacy concerns of the community And other conduct which could reasonably be considered inappropriate in a professional setting"
   },
   {
     "objectID": "CONTRIBUTING.html#coding-style",
     "href": "CONTRIBUTING.html#coding-style",
-    "title": "",
+    "title": "model_auto_interpret",
     "section": "",
     "text": "Consistency in coding style is important throughout the project. We recommend following the official Python style guide (PEP 8). Key points include: - Indentation: Use consistent tabs or spaces to maintain readability. - Line Length: Keep lines reasonably short; avoid exceeding half the width of notebook cells if applicable. - Comments: Use # for comments and write them clearly to explain the code. - Whitespace: Include proper spacing around operators, function arguments, and within control structures. - Imports: Organize import statements in logical groups and in the recommended order (standard library, third-party packages, local modules). ## Pull Request Process  - It is recommended to create a Git branch for each pull request in order to maintain consistency. - Code should follow the official python style guide - We will be using Docstring for documentation. - We use pytest (assert). Contributions with test cases included will be easier to accept since we can check erros better. ## Code of Conduct  - Each contributor shall adhere to the examples set below: Use welcoming and inclusive language Be respectful of differing opinions and viewpoints Be cognizant of intention when proivding constructive criticism Recognize the best in others Show empathy towards community members Each contributor should avoid behaviours such as:\n\nSexualized language and unwanted sexual attention/advances Trolling, insults, derogatory comments, and political attacks Public or private harassment Ignoring privacy concerns of the community And other conduct which could reasonably be considered inappropriate in a professional setting"
   },
@@ -270,9 +357,9 @@
     "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html",
     "title": "hyperparameter_tuning_summary.param_tuning_summary",
     "section": "",
-    "text": "hyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
+    "text": "hyperparameter_tuning_summary.param_tuning_summary(param_search_cv)\nCreate a summary of the hyperparameter tuning results and extract the best estimator\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters\n\n\n\n\n\n\n\n&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; from sklearn.model_selection import GridSearchCV\n&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; param_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}\n&gt;&gt;&gt; grid_search = GridSearchCV(SVC(), param_grid, cv=5)\n&gt;&gt;&gt; grid_search.fit(X, y)\nGridSearchCV(...)\n&gt;&gt;&gt; \n&gt;&gt;&gt; summary_df, best_estimator = param_tuning_summary(grid_search)\n&gt;&gt;&gt; print(summary_df)\n   Parameter  Value  Best_Score\n0          C    1.0    0.980000\n1     kernel    rbf    0.980000\n&gt;&gt;&gt; print(type(best_estimator))\n&lt;class 'sklearn.svm._classes.SVC'&gt;",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "hyperparameter_tuning_summary.param_tuning_summary"
     ]
@@ -284,7 +371,7 @@
     "section": "",
     "text": "Name\nType\nDescription\nDefault\n\n\n\n\nparam_search_cv\n\n\nrequired",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "hyperparameter_tuning_summary.param_tuning_summary"
     ]
@@ -296,7 +383,19 @@
     "section": "",
     "text": "Name\nType\nDescription\n\n\n\n\ndf_summary\npandas.DataFrame\na Dataframe containing the best set of parameters’ names, values and scores.\n\n\nbest_estimator\nthe best model with the best set of parameters",
     "crumbs": [
-      "Reference",
+      "API Reference",
+      "Model Interpretation Methods",
+      "hyperparameter_tuning_summary.param_tuning_summary"
+    ]
+  },
+  {
+    "objectID": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#examples",
+    "href": "reference/hyperparameter_tuning_summary.param_tuning_summary.html#examples",
+    "title": "hyperparameter_tuning_summary.param_tuning_summary",
+    "section": "",
+    "text": "&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; from sklearn.model_selection import GridSearchCV\n&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; param_grid = {'C': [0.1, 1, 10], 'kernel': ['rbf', 'linear']}\n&gt;&gt;&gt; grid_search = GridSearchCV(SVC(), param_grid, cv=5)\n&gt;&gt;&gt; grid_search.fit(X, y)\nGridSearchCV(...)\n&gt;&gt;&gt; \n&gt;&gt;&gt; summary_df, best_estimator = param_tuning_summary(grid_search)\n&gt;&gt;&gt; print(summary_df)\n   Parameter  Value  Best_Score\n0          C    1.0    0.980000\n1     kernel    rbf    0.980000\n&gt;&gt;&gt; print(type(best_estimator))\n&lt;class 'sklearn.svm._classes.SVC'&gt;",
+    "crumbs": [
+      "API Reference",
       "Model Interpretation Methods",
       "hyperparameter_tuning_summary.param_tuning_summary"
     ]
@@ -320,9 +419,9 @@
     "href": "reference/model_compare.model_cv_metric_compare.html",
     "title": "model_compare.model_cv_metric_compare",
     "section": "",
-    "text": "model_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
+    "text": "model_compare.model_cv_metric_compare(models_dict, X, y, cv=5)\nEvaluates multiple binary classification models using cross-validation and returns a metric/scorer comparison DataFrame.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5\n\n\n\n\n\n\n\naccuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.\n\n\n\n\n\n\n&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; from sklearn.ensemble import RandomForestClassifier\n&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; import pandas as pd\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; X = pd.DataFrame(X)\n&gt;&gt;&gt; y = pd.Series(y)\n&gt;&gt;&gt; \n&gt;&gt;&gt; models = {\n...     'SVC': SVC(),\n...     'RandomForest': RandomForestClassifier(random_state=42)\n... }\n&gt;&gt;&gt; \n&gt;&gt;&gt; results = model_cv_metric_compare(models, X, y, cv=5)\n&gt;&gt;&gt; print(results)\n                  accuracy  precision  recall      f1  roc_auc\nModel                                                          \nSVC                  0.98       0.98    0.98    0.98     0.99\nRandomForest         0.96       0.96    0.96    0.96     0.98\n\n\n\n\nAll models must implement scikit-learn’s estimator interface\nFor ROC-AUC, models must support the predict_proba() method\nUses stratified K-fold cross-validation",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_compare.model_cv_metric_compare"
     ]
@@ -334,7 +433,7 @@
     "section": "",
     "text": "Name\nType\nDescription\nDefault\n\n\n\n\nmodels_dict\ndict\nDictionary of {model_name: pipeline_object}. Note: Models do not need to be fitted beforehand.\nrequired\n\n\nX\nDataFrame\nFeatures (Training set or full dataset).\nrequired\n\n\ny\nSeries\nLabels (Training set or full dataset).\nrequired\n\n\ncv\nint\nNumber of cross-validation folds (default 5).\n5",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_compare.model_cv_metric_compare"
     ]
@@ -346,7 +445,7 @@
     "section": "",
     "text": "accuracy\nprecision (pos_label=“Y”)\nrecall (pos_label=“Y”)\nf1 (pos_label=“Y”)\nroc_auc (if model supports predict_proba)",
     "crumbs": [
-      "Reference",
+      "API Reference",
       "Model Interpretation Methods",
       "model_compare.model_cv_metric_compare"
     ]
@@ -358,7 +457,31 @@
     "section": "",
     "text": "Name\nType\nDescription\n\n\n\n\ndataframe\npandas.DataFrame\nDataframe containing model name and mean evaluation metrics.",
     "crumbs": [
-      "Reference",
+      "API Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html#examples",
+    "href": "reference/model_compare.model_cv_metric_compare.html#examples",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "&gt;&gt;&gt; from sklearn.svm import SVC\n&gt;&gt;&gt; from sklearn.ensemble import RandomForestClassifier\n&gt;&gt;&gt; from sklearn.datasets import load_iris\n&gt;&gt;&gt; import pandas as pd\n&gt;&gt;&gt; \n&gt;&gt;&gt; X, y = load_iris(return_X_y=True)\n&gt;&gt;&gt; X = pd.DataFrame(X)\n&gt;&gt;&gt; y = pd.Series(y)\n&gt;&gt;&gt; \n&gt;&gt;&gt; models = {\n...     'SVC': SVC(),\n...     'RandomForest': RandomForestClassifier(random_state=42)\n... }\n&gt;&gt;&gt; \n&gt;&gt;&gt; results = model_cv_metric_compare(models, X, y, cv=5)\n&gt;&gt;&gt; print(results)\n                  accuracy  precision  recall      f1  roc_auc\nModel                                                          \nSVC                  0.98       0.98    0.98    0.98     0.99\nRandomForest         0.96       0.96    0.96    0.96     0.98",
+    "crumbs": [
+      "API Reference",
+      "Model Interpretation Methods",
+      "model_compare.model_cv_metric_compare"
+    ]
+  },
+  {
+    "objectID": "reference/model_compare.model_cv_metric_compare.html#notes",
+    "href": "reference/model_compare.model_cv_metric_compare.html#notes",
+    "title": "model_compare.model_cv_metric_compare",
+    "section": "",
+    "text": "All models must implement scikit-learn’s estimator interface\nFor ROC-AUC, models must support the predict_proba() method\nUses stratified K-fold cross-validation",
+    "crumbs": [
+      "API Reference",
       "Model Interpretation Methods",
       "model_compare.model_cv_metric_compare"
     ]
