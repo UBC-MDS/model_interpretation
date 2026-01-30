@@ -61,6 +61,10 @@ dev = [
 
 docs = [
     "quartodoc",
+    "jupyter",
+    "nbformat",
+    "nbclient",
+    "ipykernel",
 ]
 
 tests = [

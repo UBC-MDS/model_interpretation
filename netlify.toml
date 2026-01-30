@@ -6,6 +6,8 @@
     tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
     export PATH="$HOME/quarto/bin:$PATH" && \
     quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
     pip install -e .[docs] && \
     quartodoc build && \
     quarto render
@@ -26,6 +28,8 @@
     tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
     export PATH="$HOME/quarto/bin:$PATH" && \
     quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
     pip install -e .[docs] && \
     quartodoc build && \
     quarto render
@@ -39,6 +43,8 @@
     tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
     export PATH="$HOME/quarto/bin:$PATH" && \
     quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
     pip install -e .[docs] && \
     quartodoc build && \
     quarto render
@@ -52,6 +58,8 @@
     tar -xzf /tmp/quarto.tgz -C $HOME/quarto --strip-components=1 && \
     export PATH="$HOME/quarto/bin:$PATH" && \
     quarto --version && \
+    python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m pip install jupyter nbformat nbclient ipykernel && \
     pip install -e .[docs] && \
     quartodoc build && \
     quarto render
@@ -59,3 +67,4 @@
 
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
+
